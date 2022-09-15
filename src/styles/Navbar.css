@@ -1,0 +1,27 @@
+.button__sign-up {
+    background-color: #1976d2 !important;
+    border: 1px solid #f9f9f9 !important;
+    border-radius: 5px !important;
+    color: #f9f9f9 !important;
+    cursor: pointer !important;
+}
+
+.button__sign-up:hover {
+    background-color: #f9f9f9 !important;
+    border: 1px solid #f9f9f9 !important;
+    color: #1976d2 !important;
+}
+
+.button__log-in {
+    background-color: #f9f9f9 !important;
+    border: 1px solid #f9f9f9 !important;
+    border-radius: 5px !important;
+    color: #1976d2 !important;
+    cursor: pointer !important;
+}
+
+.button__log-in:hover {
+    background-color: #dcdcdc !important;
+    border: 1px solid #dcdcdc !important;
+    color: #1976d2 !important;
+}
