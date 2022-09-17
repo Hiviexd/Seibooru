@@ -3,17 +3,19 @@ import { Schema } from "mongoose";
 export default new Schema({
 	_id: String,
 	username: String,
+	safeUsername: String,
 	passwordHash: String,
+	accountToken: String,
 	profile: {
-		pfp: {
+		avatar: {
 			data: Buffer,
 			contentType: String,
 		},
 		bio: String,
 	},
-	posts: [String],
-	comments: [String],
+	permissions: {
+		type: Array,
+		default: ["post:create"],
+	},
 	createdAt: Date,
-	isAdmin: Boolean,
-	isBanned: Boolean,
 });
