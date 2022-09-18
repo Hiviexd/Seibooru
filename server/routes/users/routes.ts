@@ -6,6 +6,7 @@ import unbanUser from "./unbanUser";
 import demoteUser from "./demoteUser";
 import registerUser from "./registerUser";
 import authenticateUser from "./authenticateUser";
+import Authenticate from "../../middlewares/Authenticate";
 
 const router = Router();
 

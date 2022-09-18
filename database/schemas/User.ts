@@ -15,7 +15,8 @@ export default new Schema({
 	},
 	permissions: {
 		type: Array,
-		default: ["post:create"],
+		default: ["post:create", "post:update", "post:delete"],
+		//? Available permissions: post:create, post:update, post:delete, admin:post, admin:user
 	},
 	createdAt: Date,
 });

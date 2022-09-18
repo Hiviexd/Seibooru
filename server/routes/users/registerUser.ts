@@ -5,7 +5,7 @@ import { PasswordManager } from "../../helpers/passwordManager";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 
 export default async (req: Request, res: Response) => {
-	const logger = new LoggerConsumer("User Registration", req);
+	const logger = new LoggerConsumer("registerUser", req);
 	const { username, password } = req.body;
 
 	logger.printInfo("Registrating a new user...");
@@ -51,7 +51,7 @@ export default async (req: Request, res: Response) => {
 		accountToken: accountToken,
 		passwordHash: passwordHash,
 		createdAt: new Date(),
-		permissions: ["post:create"],
+		permissions: ["post:create", "post:update", "post:delete"],
 	});
 
 	const createdUser = await users.findById(userId);
