@@ -8,7 +8,7 @@ export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("registerUser", req);
 	const { username, password } = req.body;
 
-	logger.printInfo("Registrating a new user...");
+	logger.printInfo("Registering a new user...");
 
 	// ? Check if the provided data is valid
 	if (

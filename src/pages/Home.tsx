@@ -1,13 +1,12 @@
 import React from "react";
-import videoBg from "../assets/videoBg.webm";
-import "../styles/Home.css";
+import Navbar from "../components/Navbar";
+import "../styles/pages/Home.scss";
 
 export default function Home() {
 	return (
+		<>
+		<Navbar />
 		<div className="home">
-			<video className="videoBg" autoPlay loop muted>
-				<source src={videoBg} type="video/webm" />
-			</video>
 			<div className="home__content">
 				<div className="home__text">
 					<span className="home__name">Seibooru</span>
@@ -23,5 +22,6 @@ export default function Home() {
             </div>
 			</div>
 		</div>
+		</>
 	);
 }

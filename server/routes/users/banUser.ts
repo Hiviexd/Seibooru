@@ -1,20 +1,12 @@
-import { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { users } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
+import * as middlewares from "../../middlewares";
 
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("banUser", req);
     const adminPerms = ["admin:user", "admin:post"];
     const userPerms = ["post:create", "post:update", "post:delete"];
-
-    //! only users with admin perms can access this route
-    if (!req.body._MANAGER.permissions.some((perm: string) => adminPerms.includes(perm))) {
-        logger.printError("Unauthorized");
-        return res.status(401).send({
-            status: 401,
-            message: "Unauthorized",
-        });
-    }
     
     logger.printInfo(`Banning user ${req.params.id}`);
 

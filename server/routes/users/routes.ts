@@ -6,20 +6,21 @@ import unbanUser from "./unbanUser";
 import demoteUser from "./demoteUser";
 import registerUser from "./registerUser";
 import authenticateUser from "./authenticateUser";
-import Authenticate from "../../middlewares/Authenticate";
+//import editUser from "./editUser";
+import { isLoggedIn, isOwner, isAdmin } from "../../middlewares";
 
 const router = Router();
 
 //? GET requests
-
 router.get("/:id", getUser);
 
 //? POST requests
 router.post("/register", registerUser);
 router.post("/me", authenticateUser);
-router.post("/:id/promote", promoteUser);
-router.post("/:id/ban", banUser);
-router.post("/:id/unban", unbanUser);
-router.post("/:id/demote", demoteUser);
+//router.post("/:id/edit", isLoggedIn, editUser); :3333333333333333333333333333333333333333333333333333333333333333333
+router.post("/:id/promote", isLoggedIn, isOwner, promoteUser);
+router.post("/:id/demote", isLoggedIn, isOwner, demoteUser);
+router.post("/:id/ban", isLoggedIn, isAdmin, banUser);
+router.post("/:id/unban", isLoggedIn, isAdmin, unbanUser);
 
 export const userRouter = router;

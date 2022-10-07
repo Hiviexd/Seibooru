@@ -23,3 +23,7 @@ mongoose.connect(
 
 export const users = mongoose.model("User", User);
 export const posts = mongoose.model("Post", Post);
+// // 
+// posts.find().then((post) => {
+// 	posts.findByIdAndDelete(post?._id)
+// })

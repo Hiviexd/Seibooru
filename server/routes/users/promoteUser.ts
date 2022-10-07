@@ -1,21 +1,12 @@
-import { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { users } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
-import ownerUsername from "../../../config.json";
+import * as middlewares from "../../middlewares";
 
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("promoteUser", req);
     const adminPerms = ["admin:user", "admin:post"];
     
-    //! only site owner can access this route
-    if (req.body._MANAGER.username != ownerUsername) {
-        logger.printError("Unauthorized");
-        return res.status(401).send({
-            status: 401,
-            message: "Unauthorized",
-        });
-    }
-
     logger.printInfo(`Promoting user ${req.params.id}`);
 
     const user = await users.findOne({ _id: req.params.id });
