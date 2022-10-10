@@ -1,60 +1,72 @@
 .post_selector {
-    width: 240px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    background: #3c3c3c42;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
+	width: 240px;
+	height: 300px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	align-content: center;
+	justify-content: flex-start;
+	align-items: center;
+	background: #3c3c3c42;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: ease-in-out 120ms;
 
-    .image {
-        width: 100%;
-        height: 80%;
-        background-position: center;
-        background-size: contain;
-        border-radius: 5px;
-    }
+	&:hover {
+		background: #68686842;
+		box-shadow: 0 0 10px #0e0e0e;
 
-    .metadata_row {
-        width: 100%;
-        height: 20%;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        align-content: flex-start;
-        justify-content: flex-start;
-        align-items: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+		.container.like {
+			background-color: #c2336f;
+		}
+	}
 
-        p.title {
-            margin: 0;
-        }
+	.image {
+		width: 100%;
+		height: 80%;
+		background-position: center;
+		background-size: contain;
+		border-radius: 5px;
+	}
 
-        .container {
-            background-color: #404040;
-            min-width: 50px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-content: center;
-            justify-content: space-between;
-            align-items: center;
-            margin-right: auto;
-            margin-top: auto;
-            margin-bottom: auto;
+	.metadata_row {
+		width: 100%;
+		height: 20%;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-content: flex-start;
+		justify-content: flex-start;
+		align-items: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 
-            p {
-                margin: 0;
-            }
-        }
-    }
+		p.title {
+			margin: 0;
+		}
+
+		.container {
+			background-color: #404040;
+			min-width: 50px;
+			padding: 5px 10px;
+			border-radius: 5px;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-content: center;
+			justify-content: space-between;
+			align-items: center;
+			margin-right: auto;
+			margin-top: auto;
+			margin-bottom: auto;
+			transition: ease-in-out 120ms;
+
+			p {
+				margin: 0;
+			}
+		}
+	}
 }

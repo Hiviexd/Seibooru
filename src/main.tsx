@@ -8,12 +8,19 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Home from "./pages/Home";
 import Listing from "./pages/Listing";
+import LogIn from "./pages/LogIn";
+import theme from "./theme";
+import { ThemeProvider } from "@emotion/react";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<BrowserRouter>
-		<Routes>
-			<Route path="/" element={<Home />} />
-			<Route path="/posts" element={<Listing />} />
-		</Routes>
+		<ThemeProvider theme={theme}>
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="/posts" element={<Listing />} />
+				<Route path="/login" element={<LogIn />} />
+				<Route path="/signup" element={<LogIn />} />
+			</Routes>
+		</ThemeProvider>
 	</BrowserRouter>
 );

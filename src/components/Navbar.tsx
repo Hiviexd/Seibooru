@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -20,7 +21,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { color } from "@mui/system";
-import "../styles/Navbar.css";
+import "../styles/Navbar.scss";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -169,15 +170,17 @@ export default function PrimarySearchAppBar() {
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
-			<AppBar position="static">
+			<AppBar position="static" enableColorOnDark>
 				<Toolbar>
-					<Typography
-						variant="h6"
-						noWrap
-						component="div"
-						sx={{ display: { xs: "none", sm: "block" } }}>
-						Seibooru
-					</Typography>
+					<Link to="/posts" className="clean-link">
+						<Typography
+							variant="h6"
+							noWrap
+							component="div"
+							sx={{ display: { xs: "none", sm: "block" } }}>
+							Seibooru
+						</Typography>
+					</Link>
 					<Search>
 						<SearchIconWrapper>
 							<SearchIcon />
@@ -189,20 +192,25 @@ export default function PrimarySearchAppBar() {
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { xs: "none", md: "flex" } }}>
-						<Button
-							className="button__log-in"
-							variant="contained"
-							size="small"
-							sx={{ m: "16px 4px" }}>
-							Sign Up
-						</Button>
-						<Button
-							className="button__sign-up"
-							variant="outlined"
-							size="small"
-							sx={{ m: "16px 4px" }}>
-							Log In
-						</Button>
+						<Link to="/signup" className="clean-link">
+							<Button
+								className="button__log-in"
+								variant="contained"
+								size="small"
+								sx={{ m: "16px 4px" }}>
+								Sign Up
+							</Button>
+						</Link>
+						<Link to="/login" className="clean-link">
+							<Button
+								className="button__sign-up"
+								variant="outlined"
+								size="small"
+								sx={{ m: "16px 4px" }}
+								href="/login">
+								Log In
+							</Button>
+						</Link>
 						<IconButton
 							size="large"
 							aria-label="show 4 new mails"

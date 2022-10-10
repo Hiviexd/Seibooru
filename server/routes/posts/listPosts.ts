@@ -3,38 +3,40 @@ import { posts } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 
 export default async (req: Request, res: Response) => {
-    const logger = new LoggerConsumer("Post Listing", req);
+	const logger = new LoggerConsumer("Post Listing", req);
 
-    logger.printInfo("Loading page...")
-    let index = Number(req.query.page) || 0;
+	logger.printInfo("Loading page...");
+	let index = Number(req.query.page) || 0;
 
-    isNaN(index) ? index = 0 : index;
+	isNaN(index) ? (index = 0) : index;
 
-    const page = getPage()
+	index != 0 ? (index -= 1) : index;
 
-    const listing = await posts.find().skip(page);
-    const totalPages = (await posts.countDocuments()) / 25;
+	const page = getPage();
 
-    function getPage() {
-        const maxByPage = 25;
-        if (index == 0) return 0;
+	const listing = await posts.find().skip(page).limit(10);
+	const totalPages = (await posts.countDocuments()) / 10;
 
-        return maxByPage * index;
-    }
+	function getPage() {
+		const maxByPage = 10;
+		if (index < 1) return 0;
 
-    function roundTotalPages() {
-        const float = Number("0.".concat(totalPages.toString().split(".")[1]));
-        
-        if (float > 0) return Math.round(totalPages + 1);
+		return maxByPage * index;
+	}
 
-        return Math.round(totalPages)
-    }
+	function roundTotalPages() {
+		const float = Number("0.".concat(totalPages.toString().split(".")[1]));
 
-    return res.status(200).send({
-        status: 200,
-        data: {
-            totalPages: roundTotalPages(),
-            posts: listing
-        }
-    })
+		if (float > 0) return Math.round(totalPages + 1);
+
+		return Math.round(totalPages);
+	}
+
+	return res.status(200).send({
+		status: 200,
+		data: {
+			totalPages: roundTotalPages(),
+			posts: listing,
+		},
+	});
 };
