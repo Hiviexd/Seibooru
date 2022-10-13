@@ -1,58 +1,64 @@
 import React, { createContext, useState } from "react";
 
+export interface ILoginUser {
+	_id: string;
+	accountToken: string;
+	authenticated: boolean;
+}
+
 const defaultUser = JSON.stringify({
-  _id: "-1",
-  authenticated: false,
-  username: "Guest",
-  hasQueue: false,
-  color: "#2196f3",
+	_id: "-1",
+	accountToken: "",
+	authenticated: false,
 });
 
 function getStoredUser() {
-  let user = JSON.parse(defaultUser);
+	let user = JSON.parse(defaultUser);
 
-  try {
-    user = JSON.parse(localStorage["user_login"]);
+	try {
+		user = JSON.parse(localStorage["loginData"]);
 
-    if (!user) return JSON.parse(defaultUser);
+		if (!user) return JSON.parse(defaultUser);
 
-    if (typeof JSON.parse(localStorage["user_login"]) == "string")
-      return JSON.parse(defaultUser);
+		if (typeof JSON.parse(localStorage["loginData"]) == "string")
+			return JSON.parse(defaultUser); // Prevent stringified json output
 
-    if (!user.color) user.color = "#2196f3";
+		return user;
+	} catch (e: any) {
+		console.error(e);
+		localStorage.removeItem("loginData");
 
-    return user;
-  } catch (e: any) {
-    console.error(e);
-    localStorage.removeItem("user_login");
-
-    return JSON.parse(defaultUser);
-  }
+		return JSON.parse(defaultUser);
+	}
 }
 
 interface IUserContextType {
-  login;
-  setLogin: (u) => any;
+	login: ILoginUser;
+	setLogin: (u) => any;
 }
 
 export const AuthContext = createContext<IUserContextType>({
-  login: JSON.parse(defaultUser),
-  setLogin: (u: any) => void {},
+	login: JSON.parse(defaultUser),
+	setLogin: (u: ILoginUser) => void {},
 });
 
 const AuthProvider = ({ children }: any) => {
-  const [login, setLogin] = useState<ILoginUser>(getStoredUser());
+	const [login, _setLogin] = useState<ILoginUser>(getStoredUser());
 
-  return (
-    <AuthContext.Provider
-      value={{
-        login,
-        setLogin,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+	function setLogin(data: ILoginUser) {
+		localStorage["loginData"] = JSON.stringify(data);
+		_setLogin(data);
+	}
+
+	return (
+		<AuthContext.Provider
+			value={{
+				login,
+				setLogin,
+			}}>
+			{children}
+		</AuthContext.Provider>
+	);
 };
 
 export default AuthProvider;

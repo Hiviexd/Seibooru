@@ -8,16 +8,17 @@ import registerUser from "./registerUser";
 import authenticateUser from "./authenticateUser";
 //import editUser from "./editUser";
 import { isLoggedIn, isOwner, isAdmin } from "../../middlewares";
+import getUserAvatar from "./getUserAvatar";
 
 const router = Router();
 
 //? GET requests
+router.get("/:id/avatar", getUserAvatar);
 router.get("/:id", getUser);
 
 //? POST requests
 router.post("/register", registerUser);
 router.post("/me", authenticateUser);
-//router.post("/:id/edit", isLoggedIn, editUser); :3333333333333333333333333333333333333333333333333333333333333333333
 router.post("/:id/promote", isLoggedIn, isOwner, promoteUser);
 router.post("/:id/demote", isLoggedIn, isOwner, demoteUser);
 router.post("/:id/ban", isLoggedIn, isAdmin, banUser);

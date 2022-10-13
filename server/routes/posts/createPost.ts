@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 import { createWriteStream } from "fs";
 import path from "path";
+import { updateTrendingTag } from "../../trending/updateTendingTag";
 
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("createPost", req);
@@ -34,7 +35,15 @@ export default async (req: Request, res: Response) => {
 			message: "Invalid image!",
 		});
 
-	const postId = crypto.randomBytes(64).toString("hex").slice(64);
+	const postId = crypto.randomBytes(20).toString("hex").slice(20);
+
+	const tags = sanitizeTags();
+
+	if (!tags || tags.length < 1)
+		return res.status(400).send({
+			status: 400,
+			message: "Provide valid tags",
+		});
 
 	const postInfo = {
 		_id: postId,
@@ -42,7 +51,7 @@ export default async (req: Request, res: Response) => {
 		title: sanitizeTitle(),
 		encoding: req.file.encoding,
 		posterId: user._id,
-		tags: sanitizeTags(),
+		tags,
 		createdAt: new Date(),
 		posterUsername: user.username,
 	};
@@ -67,17 +76,18 @@ export default async (req: Request, res: Response) => {
 			const sanitized: string[] = [];
 
 			for (let tag of _tags) {
-				tag = tag.toString().trim().toLowerCase();
+				tag = tag.toString().trim().toLowerCase().replace(/ /g, "_");
 
-				if (typeof tag == "string" && tag != "" && tag.length < 150)
+				if (typeof tag == "string" && tag != "" && tag.length < 150) {
 					sanitized.push(tag);
+				}
 			}
 
 			return sanitized;
-		} catch(e) {
+		} catch (e) {
 			console.error(e);
 
-			return []
+			return [];
 		}
 	}
 

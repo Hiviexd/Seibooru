@@ -39,9 +39,11 @@ export default async (req: Request, res: Response) => {
 		status: 200,
 		message: "Authorized!",
 		data: {
+			_id: user._id,
 			username: user.username,
 			profile: user.profile,
 			accountToken: user.accountToken,
+			authenticated: true,
 		},
 	});
 };

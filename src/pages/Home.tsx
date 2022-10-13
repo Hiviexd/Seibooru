@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/global/Navbar";
 import "../styles/pages/Home.scss";
 
 export default function Home() {
@@ -18,9 +18,7 @@ export default function Home() {
 						<a href="/login" className="home__button__link">
 							Log in
 						</a>
-						<span className="home__button__text">
-							don't have an account?
-						</span>
+						<span className="home__button__text">don't have an account?</span>
 						<a href="/signup" className="home__button__link">
 							Sign up
 						</a>

@@ -1,5 +1,5 @@
 .log__in__layout {
-	height: calc(100% - 64.75px);
+	height: calc(100% - 70px);
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -22,6 +22,14 @@
 		background: #3c3c3c42;
 		border-radius: 10px;
 		padding: 10px;
+		opacity: 1;
+		pointer-events: all;
+		transition: linear 120ms;
+
+		&.loading {
+			pointer-events: none;
+			opacity: 0.8;
+		}
 
 		.password-match-alert {
 			display: none;

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { posts, users } from "../../../database";
+import { updateTrendingTag } from "../../trending/updateTendingTag";
 
 export default async (req: Request, res: Response) => {
 	const id = req.params.id;
@@ -21,15 +22,14 @@ export default async (req: Request, res: Response) => {
 			message: "User not found!",
 		});
 
-	if (!user.permissions.includes("post:like"))
-		return res.status(403).send({
-			status: 403,
-			message: "No permissions.",
-		});
-
 	post.likes = post.likes.filter((l) => l != user._id);
 
 	await posts.findByIdAndUpdate(post._id, post);
 
-	return res.status(200).send(post);
+	post.tags.forEach((t) => updateTrendingTag(t, false));
+
+	return res.status(200).send({
+		status: 200,
+		data: post,
+	});
 };

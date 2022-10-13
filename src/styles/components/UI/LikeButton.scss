@@ -1,0 +1,27 @@
+.like-button {
+	background-color: #404040;
+	min-width: 30px;
+	padding: 5px 20px;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-content: center;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+	transition: ease-in-out 120ms;
+
+	&.liked {
+		background-color: #c2336f !important;
+	}
+
+	&:hover {
+		background-color: #c2336f;
+		box-shadow: 0 0 10px #c2336f;
+	}
+
+	p {
+		margin: 0;
+	}
+}

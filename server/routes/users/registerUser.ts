@@ -56,11 +56,23 @@ export default async (req: Request, res: Response) => {
 
 	const createdUser = await users.findById(userId);
 
+	if (!createdUser)
+		return res.status(500).send({
+			status: 500,
+			message: "Unknown error",
+		});
+
 	logger.printSuccess(`New user created! ${username} (${userId})`);
 
 	return res.status(200).send({
 		status: 200,
 		message: "Authorized!",
-		data: createdUser,
+		data: {
+			_id: createdUser._id,
+			username: createdUser.username,
+			profile: createdUser.profile,
+			accountToken: createdUser.accountToken,
+			authenticated: true,
+		},
 	});
 };

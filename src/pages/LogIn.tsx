@@ -1,13 +1,19 @@
 import { VisibilityOff, Visibility, Error } from "@mui/icons-material";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
+import { useSnackbar } from "notistack";
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/global/Navbar";
+import { AuthContext } from "../providers/AuthContext";
 import "../styles/pages/LogIn.scss";
 
 export default function LogIn() {
 	const [signup, setSignUp] = useState(
 		window.location.pathname.includes("signup")
 	);
+	const [loading, setLoading] = useState(false);
+	const loginContext = useContext(AuthContext);
+	const snackbar = useSnackbar();
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [passwordMatch, setPasswordMatch] = useState(true);
@@ -16,6 +22,11 @@ export default function LogIn() {
 		password: "",
 		confirmPassword: "",
 	});
+	const navigate = useNavigate();
+
+	function goTo(path: string) {
+		navigate(path);
+	}
 
 	function switchFormType() {
 		const defaultData = {
@@ -30,6 +41,57 @@ export default function LogIn() {
 
 	function handleClickShowPassword() {
 		setShowPassword(!showPassword);
+	}
+
+	function login() {
+		setLoading(true);
+		fetch("/api/users/me", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({
+				username: data.username,
+				password: data.password,
+			}),
+		})
+			.then((r) => r.json())
+			.then((data) => {
+				setLoading(false);
+
+				if (data.status != 200)
+					return snackbar.enqueueSnackbar(data.message, {
+						variant: "error",
+					});
+
+				loginContext.setLogin(data.data);
+				goTo("/listing");
+			});
+	}
+
+	function register() {
+		setLoading(true);
+		fetch("/api/users/register", {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({
+				username: data.username.toString(),
+				password: data.password.toString(),
+			}),
+		})
+			.then((r) => r.json())
+			.then((data) => {
+				setLoading(false);
+				if (data.status != 200)
+					return snackbar.enqueueSnackbar(data.message, {
+						variant: "error",
+					});
+
+				loginContext.setLogin(data.data);
+				goTo("/listing");
+			});
 	}
 
 	function LogInOptions() {
@@ -48,7 +110,7 @@ export default function LogIn() {
 				/>
 				<TextField
 					type={showPassword ? "text" : "password"}
-					label="Confirm Password"
+					label="Password"
 					variant="outlined"
 					onInput={(ev: any) => {
 						data.password = ev.target.value;
@@ -62,17 +124,15 @@ export default function LogIn() {
 									aria-label="toggle password visibility"
 									onClick={handleClickShowPassword}
 									edge="end">
-									{showPassword ? (
-										<VisibilityOff />
-									) : (
-										<Visibility />
-									)}
+									{showPassword ? <VisibilityOff /> : <Visibility />}
 								</IconButton>
 							</InputAdornment>
 						),
 					}}
 				/>
-				<Button variant="contained">Log-in</Button>
+				<Button variant="contained" onClick={login}>
+					Log-in
+				</Button>
 				<p className="switch-type">
 					Are you new here?{" "}
 					<span className="switch-link" onClick={switchFormType}>
@@ -101,10 +161,14 @@ export default function LogIn() {
 					label="Username"
 					variant="outlined"
 					defaultValue={data.username}
+					onInput={(ev: any) => {
+						data.username = ev.target.value;
+						setData(data);
+					}}
 				/>
 				<TextField
 					type={showPassword ? "text" : "password"}
-					label="Confirm Password"
+					label="Password"
 					variant="outlined"
 					onInput={(ev: any) => {
 						data.password = ev.target.value;
@@ -118,11 +182,7 @@ export default function LogIn() {
 									aria-label="toggle password visibility"
 									onClick={handleClickShowPassword}
 									edge="end">
-									{showPassword ? (
-										<VisibilityOff />
-									) : (
-										<Visibility />
-									)}
+									{showPassword ? <VisibilityOff /> : <Visibility />}
 								</IconButton>
 							</InputAdornment>
 						),
@@ -138,7 +198,6 @@ export default function LogIn() {
 						setData(data);
 						setPasswordMatch(ev.target.value == data.password);
 					}}
-					error={!passwordMatch}
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">
@@ -146,17 +205,15 @@ export default function LogIn() {
 									aria-label="toggle password visibility"
 									onClick={handleClickShowPassword}
 									edge="end">
-									{showPassword ? (
-										<VisibilityOff />
-									) : (
-										<Visibility />
-									)}
+									{showPassword ? <VisibilityOff /> : <Visibility />}
 								</IconButton>
 							</InputAdornment>
 						),
 					}}
 				/>
-				<Button variant="contained">Sign-Up</Button>
+				<Button variant="contained" onClick={register}>
+					Sign-Up
+				</Button>
 				<p className="switch-type" onClick={switchFormType}>
 					Already have an account?{" "}
 					<span className="switch-link" onClick={switchFormType}>
@@ -171,7 +228,7 @@ export default function LogIn() {
 		<>
 			<Navbar />
 			<div className="log__in__layout">
-				<div className="form">
+				<div className={loading ? "form loading" : "form"}>
 					{signup ? <SignUpOptions /> : <LogInOptions />}
 				</div>
 			</div>

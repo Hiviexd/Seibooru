@@ -1,0 +1,89 @@
+.navbar {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 20px 50px;
+	background-color: #2e7ee3;
+	color: #ffffff;
+	height: calc(
+		70px - 40px
+	); // you need to include padding sizing too, it's multiplied by 2, cuz it's top and bottom padding
+}
+
+.navbar-left {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	.button {
+		margin-right: 10px;
+		text-decoration: none;
+		color: #ffffff;
+		transition: 0.1s ease-in-out;
+		font-size: 1.1rem;
+		line-height: 40px;
+		padding: 0 20px;
+		border-radius: 5px;
+
+		&:visited {
+			color: white;
+		}
+
+		&:hover {
+			background-color: #ffffff;
+			color: #2e7ee3;
+		}
+	}
+
+	.logo-container {
+		height: 40px;
+		margin-right: 40px;
+	}
+
+	.logo {
+		color: white;
+	}
+}
+
+.navbar-right {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-left: auto;
+
+	.button {
+		margin-left: 10px;
+		text-decoration: none;
+		transition: 0.1s ease-in-out;
+		font-size: 1rem;
+		height: 35px;
+		line-height: 35px;
+		padding: 0 10px;
+		border-radius: 5px;
+	}
+
+	.login {
+		color: #ffffff;
+		background-color: #2e7ee3;
+		border: 1px solid #ffffff;
+
+		&:hover {
+			background-color: #ffffff;
+			color: #2e7ee3;
+		}
+	}
+
+	.signup {
+		color: #2e7ee3;
+		background-color: #ffffff;
+		border-color: #2e7ee3;
+
+		&:hover {
+			background-color: rgb(235, 235, 235);
+		}
+	}
+}
+
+.icon-menu {
+	margin-right: 5px;
+}
