@@ -6,13 +6,8 @@ export default new Schema({
 	safeUsername: String,
 	passwordHash: String,
 	accountToken: String,
-	profile: {
-		avatar: {
-			data: Buffer,
-			contentType: String,
-		},
-		bio: String,
-	},
+	avatarFilename: String,
+	bio: String,
 	permissions: {
 		type: Array,
 		default: ["post:create", "post:update", "post:delete"],

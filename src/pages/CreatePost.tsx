@@ -1,6 +1,8 @@
 import { Button, TextField } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useSnackbar } from "notistack";
 import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/global/Navbar";
 import { TrendingTags } from "../components/global/TrendingTags";
 import { AuthContext } from "../providers/AuthContext";
@@ -12,6 +14,7 @@ export function CreatePost() {
 	const formData = useRef(new FormData());
 	const { login } = useContext(AuthContext);
 	const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
 
 	function handleFileInput(ev: any) {
 		if (ev.target.files && ev.target.files[0]) {
@@ -37,7 +40,10 @@ export function CreatePost() {
 						variant: "error",
 					});
 
-				enqueueSnackbar("Post created!");
+                enqueueSnackbar("Post created!", {
+                    variant: "success",
+                });
+                navigate("/listing");
 				setLoading(false);
 			});
 	}
@@ -84,16 +90,13 @@ export function CreatePost() {
 								);
 							}}
 						/>
-						<Button variant="contained" onClick={sendPost}>
-							post image
-						</Button>
-						{/* <LoadingButton
+						<LoadingButton
 							variant="contained"
 							onClick={sendPost}
 							loading={loading}
 							loadingPosition="start">
 							Upload
-						</LoadingButton> */}
+						</LoadingButton>
 					</div>
 				</div>
 			</div>

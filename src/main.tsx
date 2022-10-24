@@ -9,6 +9,7 @@ import "@fontsource/roboto/700.css";
 import Home from "./pages/Home";
 import Listing from "./pages/Listing";
 import LogIn from "./pages/LogIn";
+import Profile from "./pages/Profile";
 import theme from "./theme";
 import { ThemeProvider } from "@emotion/react";
 import AuthProvider from "./providers/AuthContext";
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 							<Route path="/signup" element={<LogIn />} />
 							<Route path="/posts" element={<Post />} />
 							<Route path="/new" element={<CreatePost />} />
+                            <Route path="/users/:id" element={<Profile />} />
 							<Route path="*" element={<Listing />} />
 						</Routes>
 					</ThemeProvider>

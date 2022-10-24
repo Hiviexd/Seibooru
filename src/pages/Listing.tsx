@@ -6,6 +6,7 @@ import { generateComponentKey } from "../utils/generateComponentKey";
 import { Pagination } from "@mui/material";
 import { TrendingTags } from "../components/global/TrendingTags";
 import { TrendingTagsContext } from "../providers/TrendingTagsContext";
+import { PostButton } from "../components/UI/PostButton";
 
 export default function Listing() {
 	const [posts, setPosts] = useState([]);
@@ -57,6 +58,7 @@ export default function Listing() {
 						}}
 					/>
 				</div>
+                <PostButton />
 			</div>
 		</>
 	);

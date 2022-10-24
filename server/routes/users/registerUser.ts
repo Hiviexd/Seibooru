@@ -52,6 +52,8 @@ export default async (req: Request, res: Response) => {
 		passwordHash: passwordHash,
 		createdAt: new Date(),
 		permissions: ["post:create", "post:update", "post:delete"],
+        avatarFilename: "default.png",
+        bio: "Hello, world!"
 	});
 
 	const createdUser = await users.findById(userId);
@@ -70,7 +72,8 @@ export default async (req: Request, res: Response) => {
 		data: {
 			_id: createdUser._id,
 			username: createdUser.username,
-			profile: createdUser.profile,
+			avatarFilename: createdUser.avatarFilename,
+            bio: createdUser.bio,
 			accountToken: createdUser.accountToken,
 			authenticated: true,
 		},

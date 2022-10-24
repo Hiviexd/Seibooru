@@ -9,12 +9,14 @@ import authenticateUser from "./authenticateUser";
 //import editUser from "./editUser";
 import { isLoggedIn, isOwner, isAdmin } from "../../middlewares";
 import getUserAvatar from "./getUserAvatar";
+import listPostsByUser from "./listPostsByUser";
 
 const router = Router();
 
 //? GET requests
-router.get("/:id/avatar", getUserAvatar);
 router.get("/:id", getUser);
+router.get("/:id/avatar", getUserAvatar);
+router.get("/:id/posts", listPostsByUser);
 
 //? POST requests
 router.post("/register", registerUser);
