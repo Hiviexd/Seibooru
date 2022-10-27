@@ -62,18 +62,25 @@ export default function Profile() {
 					</div>
 				</div>
 				<div className="profile-posts">
-					{posts.map((post) => (
-						<PostSelector post={post} />
-					))}
+					{!posts.length ? (
+						<div className="no-posts">
+							<h1>All empty here...</h1>
+							{login._id === profile?._id && <h4>Try posting something!</h4>}
+						</div>
+					) : (
+						posts.map((post) => <PostSelector post={post} />)
+					)}
 				</div>
-				<Pagination
-					count={totalPages}
-					page={page}
-					onChange={(ev, page) => {
-						setPage(page);
-						refreshListing(page);
-					}}
-				/>
+				{posts.length && (
+					<Pagination
+						count={totalPages}
+						page={page}
+						onChange={(ev, page) => {
+							setPage(page);
+							refreshListing(page);
+						}}
+					/>
+				)}
 			</div>
 			<PostButton />
 		</>

@@ -2,6 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthContext";
 import { generateComponentKey } from "../../utils/generateComponentKey";
 import "./../../styles/components/UI/FollowUserButton.scss";
+import PersonIcon from '@mui/icons-material/Person';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 interface IFollowersResponse {
 	size: number;
@@ -67,6 +71,7 @@ export function FollowUserButton({ userId }: { userId: string }) {
 				}}>
 				{following ? "Unfollow" : "Follow"}
 			</div>
+                {/* {following ? <PersonOffIcon /> : <PersonAddAlt1Icon />} */}
 		</div>
 	);
 }

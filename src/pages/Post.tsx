@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/global/Navbar";
-import { PostSelector } from "../components/listing/PostSelector";
+import { AuthContext } from "../providers/AuthContext";
 import "../styles/pages/Post.scss";
-import { generateComponentKey } from "../utils/generateComponentKey";
-import { Pagination } from "@mui/material";
 import { TrendingTags } from "../components/global/TrendingTags";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { LikeButton } from "../components/UI/LikeButton";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function Post() {
 	const [postData, setPostData] = useState<any>();
 	const postId = new URLSearchParams(location.search).get("post");
+	const { login } = useContext(AuthContext);
 
 	useEffect(() => {
 		fetch(`/api/posts/${postId}`)
@@ -36,9 +37,32 @@ export default function Post() {
 							backgroundImage: `url(/api/posts/${postData._id}/image)`,
 						}}></div>
 					<div className="metadata">
-						<div className="title-and-likes-container">
+						<div className="title-and-buttons-container">
 							<p className="title">{postData.title}</p>
-							<LikeButton post={postData} />
+							<div className="buttons-container">
+								{login._id === postData.posterId && (
+									<>
+										<Tooltip title="Edit">
+											<IconButton
+												className="button"
+												aria-label="edit"
+												size="small">
+												<EditIcon />
+											</IconButton>
+										</Tooltip>
+										<Tooltip title="Delete">
+											<IconButton
+												className="button"
+												aria-label="delete"
+												size="small"
+												color="error">
+												<DeleteIcon />
+											</IconButton>
+										</Tooltip>
+									</>
+								)}
+								<LikeButton post={postData} />
+							</div>
 						</div>
 						<div className="user-data">
 							<div
@@ -50,6 +74,7 @@ export default function Post() {
 								{postData.posterUsername}
 							</Link>
 						</div>
+						<div className="tags-label">Tags</div>
 						<div className="tags-listing">
 							{postData.tags.map((t) => (
 								<div className="tag">{t}</div>
