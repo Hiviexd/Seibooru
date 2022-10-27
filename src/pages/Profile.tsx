@@ -46,20 +46,30 @@ export default function Profile() {
 			<Navbar />
 			<div className="profile-layout">
 				<div className="profile">
-					<div className="profile-header-avatar">
-						<div
-							className="profile-pic"
-							style={{
-								backgroundImage: `url(/api/users/${id}/avatar)`,
-							}}
-						/>
-					</div>
-					<div className="profile-header-info">
-						<div className="name-and-followers">
-							<h1 className="profile-name">{profile?.username}</h1>
-							<FollowUserButton userId={id} />
+					<div className="profile-header">
+						<div className="profile-header-avatar">
+							<div
+								className="profile-pic"
+								style={{
+									backgroundImage: `url(/api/users/${id}/avatar)`,
+								}}
+							/>
+						</div>
+						<div className="profile-header-info">
+							<div className="name-and-followers">
+								<h1 className="profile-name">{profile?.username}</h1>
+								<FollowUserButton userId={id} />
+							</div>
 						</div>
 					</div>
+					{profile?.bio && <div className="profile-bio-layout">
+						<div className="profile-bio-title">
+							<h3>Bio:</h3>
+						</div>
+						<div className="profile-bio">
+							<p>{profile?.bio}</p>
+						</div>
+					</div>}
 				</div>
 				<div className="profile-posts">
 					{!posts.length ? (

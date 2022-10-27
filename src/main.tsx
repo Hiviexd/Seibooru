@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Listing from "./pages/Listing";
 import LogIn from "./pages/LogIn";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import theme from "./theme";
 import { ThemeProvider } from "@emotion/react";
 import AuthProvider from "./providers/AuthContext";
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 							<Route path="/posts" element={<Post />} />
 							<Route path="/new" element={<CreatePost />} />
                             <Route path="/users/:id" element={<Profile />} />
+                            <Route path="/settings" element={<Settings />} />
 							<Route path="*" element={<Listing />} />
 						</Routes>
 					</ThemeProvider>

@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useSnackbar } from "notistack";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/global/Navbar";
 import { TrendingTags } from "../components/global/TrendingTags";

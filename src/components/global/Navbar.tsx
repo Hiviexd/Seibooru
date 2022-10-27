@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
-import { Avatar, IconButton, Badge, Menu, MenuItem } from "@mui/material";
+import { Avatar, IconButton, Badge, Menu, MenuItem, Divider } from "@mui/material";
 import {
 	AccountCircle,
 	Settings as SettingsIcon,
@@ -17,11 +17,15 @@ import { generateComponentKey } from "../../utils/generateComponentKey";
 
 export default function Navbar() {
 	const { login, logout } = useContext(AuthContext);
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [anchorEl, setAnchorEl] = useState(null);
 	const isMenuOpen = Boolean(anchorEl);
 
-	const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+	const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
+	};
+
+	const handleMenuClose = () => {
+		setAnchorEl(null);
 	};
 
 	const navigate = useNavigate();
@@ -31,46 +35,71 @@ export default function Navbar() {
 	}
 
 	const handleProfileClick = () => {
+		handleMenuClose();
 		goTo(`/users/${login._id}`);
 	};
 
-	const handleMenuClose = () => {
-		setAnchorEl(null);
+	const handleSettingsClick = () => {
+		handleMenuClose();
+		goTo(`/settings`);
 	};
 
 	const handleLogout = () => {
+		handleMenuClose();
 		logout();
 	};
 
 	const renderMenu = (
 		<Menu
-			anchorEl={anchorEl}
+			//! anchorEl={anchorEl}
+            PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  bgcolor: '#242424',
+                  mt: 1.5,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: '#242424',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+            className="navbar-menu"
 			anchorOrigin={{
 				vertical: "top",
 				horizontal: "right",
 			}}
 			keepMounted
 			transformOrigin={{
-				vertical: "top",
+				vertical: "bottom",
 				horizontal: "right",
 			}}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-			<MenuItem
-				onClick={() => {
-					handleProfileClick();
-					handleMenuClose();
-				}}>
+                <div className="welcome-text">Welcome back, {login._id}!</div>
+                <Divider sx={{margin: "5px"}} />
+			<MenuItem onClick={handleProfileClick}>
 				<AccountCircle className="icon-menu" /> Profile
 			</MenuItem>
-			<MenuItem onClick={handleMenuClose}>
+			<MenuItem onClick={handleSettingsClick}>
 				<SettingsIcon className="icon-menu" /> Account settings
 			</MenuItem>
-			<MenuItem
-				onClick={() => {
-					handleLogout();
-					handleMenuClose();
-				}}>
+			<MenuItem onClick={handleLogout}>
 				<LogoutIcon className="icon-menu" color="inherit" /> Logout
 			</MenuItem>
 		</Menu>
@@ -120,7 +149,7 @@ export default function Navbar() {
 						edge="end"
 						aria-label="account of current user"
 						aria-haspopup="true"
-						onClick={handleProfileMenuOpen}
+						onClick={handleMenuOpen}
 						color="inherit">
 						<Avatar src={`/api/users/${login._id}/avatar`} />
 					</IconButton>

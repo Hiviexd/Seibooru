@@ -6,7 +6,6 @@ export default new Schema({
 	safeUsername: String,
 	passwordHash: String,
 	accountToken: String,
-	avatarFilename: String,
 	bio: String,
 	permissions: {
 		type: Array,

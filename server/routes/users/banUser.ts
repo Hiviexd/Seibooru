@@ -1,7 +1,6 @@
-import { Router, Request, Response } from "express";
+import { Request, Response } from "express";
 import { users } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
-import * as middlewares from "../../middlewares";
 
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("banUser", req);

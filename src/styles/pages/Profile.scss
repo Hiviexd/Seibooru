@@ -26,61 +26,100 @@
 
 	.profile {
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		justify-content: flex-start;
-		align-items: center;
-		width: 100%;
-		padding: 2em 2em 2em 2em;
-		margin-bottom: 2em;
-		flex-wrap: nowrap;
 		align-content: center;
-		background-color: #ffffff10;
+		align-items: center;
+		width: 90%;
+		max-width: 1000px;
+		height: fit-content;
+		padding: 2em;
 		border-radius: 10px;
+		background-color: #ffffff10;
+		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+		margin-bottom: 2em;
 
-		.profile-pic {
-			width: 8em;
-			height: 8em;
-			background: #00000063;
-			border-radius: 100%;
-			background-position: center;
-			background-size: cover;
-			background-repeat: no-repeat;
-		}
-
-		.profile-header-info {
-			flex-direction: column;
+		.profile-header {
+			display: flex;
+			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;
 			width: 100%;
-			display: flex;
+			margin-bottom: 0.5em;
 			flex-wrap: nowrap;
 			align-content: center;
+			border-radius: 10px;
 
-			.name-and-followers {
-				width: 95%;
+			.profile-pic {
+				width: 8em;
+				height: 8em;
+				background: #00000063;
+				border-radius: 100%;
+				background-position: center;
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+
+			.profile-header-info {
+				flex-direction: column;
+				justify-content: flex-start;
+				align-items: center;
+				width: 100%;
 				display: flex;
-				flex-direction: row;
 				flex-wrap: nowrap;
 				align-content: center;
-				justify-content: space-between;
-				align-items: center;
-				margin-left: 2.5%;
-			}
 
-			.profile-name {
-				width: 100%;
-				font-size: 1.8em;
-				font-weight: 600;
-				margin-bottom: 0.5em;
-				color: #ffffff;
-				text-align: left;
-			}
+				.name-and-followers {
+					width: 95%;
+					display: flex;
+					flex-direction: row;
+					flex-wrap: nowrap;
+					align-content: center;
+					justify-content: space-between;
+					align-items: center;
+					margin-left: 2.5%;
+				}
 
-			.profile-bio {
-				font-size: 1em;
-				font-weight: 400;
-				margin-bottom: 1em;
+				.profile-name {
+					width: 100%;
+					font-size: 1.8em;
+					font-weight: 600;
+					margin-bottom: 0.5em;
+					color: #ffffff;
+					text-align: left;
+				}
 			}
+		}
+	}
+
+	.profile-bio-layout {
+		display: flex !important;
+		width: 100%;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		align-content: center;
+		flex-wrap: nowrap;
+
+		.profile-bio-title {
+			width: 100%;
+			font-size: 1.2em;
+			font-weight: 400;
+			text-align: left;
+		}
+
+		.profile-bio {
+			width: 100%;
+			font-size: 1.1em;
+			font-weight: 300;
+			text-align: left;
+			background-color: #ffffff10;
+			border-radius: 10px;
+            padding: 1em;
+            
+            p {
+                line-break: strict;
+            }
 		}
 	}
 }
