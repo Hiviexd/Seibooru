@@ -35,11 +35,13 @@ function getStoredUser() {
 interface IUserContextType {
 	login: ILoginUser;
 	setLogin: (u) => any;
+	logout: () => any;
 }
 
 export const AuthContext = createContext<IUserContextType>({
 	login: JSON.parse(defaultUser),
 	setLogin: (u: ILoginUser) => void {},
+	logout: () => void {},
 });
 
 const AuthProvider = ({ children }: any) => {
@@ -50,11 +52,17 @@ const AuthProvider = ({ children }: any) => {
 		_setLogin(data);
 	}
 
+	function logout() {
+		localStorage.removeItem("loginData");
+		_setLogin(JSON.parse(defaultUser));
+	}
+
 	return (
 		<AuthContext.Provider
 			value={{
 				login,
 				setLogin,
+				logout,
 			}}>
 			{children}
 		</AuthContext.Provider>

@@ -79,6 +79,18 @@
 				background-repeat: no-repeat;
 			}
 
+			.username {
+				font-size: 20px;
+				font-weight: 500;
+				text-decoration: none;
+				color: #fff;
+
+				&:hover {
+					text-decoration: underline;
+					color: rgb(231, 231, 231);
+				}
+			}
+
 			p {
 				font-size: 20px;
 			}

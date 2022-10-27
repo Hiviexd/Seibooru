@@ -6,6 +6,7 @@ import { PostButton } from "../components/UI/PostButton";
 import { AuthContext } from "../providers/AuthContext";
 import "./../styles/pages/Profile.scss";
 import { useParams } from "react-router-dom";
+import { FollowUserButton } from "../components/UI/FollowUserButton";
 
 export default function Profile() {
 	const [profile, setProfile] = useState(null);
@@ -23,7 +24,7 @@ export default function Profile() {
 				setProfile(d.data);
 			});
 
-		fetch(`/api/users/${id}/liked?page=${page}`)
+		fetch(`/api/users/${id}/posts?page=${page}`)
 			.then((r) => r.json())
 			.then((d) => {
 				setPosts(d.data.posts);
@@ -32,7 +33,7 @@ export default function Profile() {
 	}, []);
 
 	function refreshListing(page: number) {
-		fetch(`/api/users/${id}/liked?page=${page}`)
+		fetch(`/api/users/${id}/posts?page=${page}`)
 			.then((r) => r.json())
 			.then((d) => {
 				setPosts(d.data.posts);
@@ -45,18 +46,18 @@ export default function Profile() {
 			<Navbar />
 			<div className="profile-layout">
 				<div className="profile">
-					<div className="profile-header">
-						<div className="profile-header-avatar">
-							<div
-								className="profile-pic"
-								style={{
-									backgroundImage: `url(/api/users/${id}/avatar)`,
-								}} 
-                            />
-						</div>
-						<div className="profile-header-info">
+					<div className="profile-header-avatar">
+						<div
+							className="profile-pic"
+							style={{
+								backgroundImage: `url(/api/users/${id}/avatar)`,
+							}}
+						/>
+					</div>
+					<div className="profile-header-info">
+						<div className="name-and-followers">
 							<h1 className="profile-name">{profile?.username}</h1>
-							<p className="profile-bio">{profile?.bio}</p>
+							<FollowUserButton userId={id} />
 						</div>
 					</div>
 				</div>

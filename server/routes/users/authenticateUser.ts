@@ -41,7 +41,6 @@ export default async (req: Request, res: Response) => {
 		data: {
 			_id: user._id,
 			username: user.username,
-			profile: user.profile,
 			accountToken: user.accountToken,
 			authenticated: true,
 		},

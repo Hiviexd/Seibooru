@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
 import { Avatar, IconButton, Badge, Menu, MenuItem } from "@mui/material";
@@ -13,9 +13,10 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import "./../../styles/components/global/Navbar.scss";
 import { LogoImage } from "../../styles/components/images/Logo";
+import { generateComponentKey } from "../../utils/generateComponentKey";
 
 export default function Navbar() {
-	const { login } = useContext(AuthContext);
+	const { login, logout } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const isMenuOpen = Boolean(anchorEl);
 
@@ -23,8 +24,22 @@ export default function Navbar() {
 		setAnchorEl(event.currentTarget);
 	};
 
+	const navigate = useNavigate();
+
+	function goTo(path: string) {
+		navigate(path);
+	}
+
+	const handleProfileClick = () => {
+		goTo(`/users/${login._id}`);
+	};
+
 	const handleMenuClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleLogout = () => {
+		logout();
 	};
 
 	const renderMenu = (
@@ -41,20 +56,28 @@ export default function Navbar() {
 			}}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-			<MenuItem onClick={handleMenuClose}>
+			<MenuItem
+				onClick={() => {
+					handleProfileClick();
+					handleMenuClose();
+				}}>
 				<AccountCircle className="icon-menu" /> Profile
 			</MenuItem>
 			<MenuItem onClick={handleMenuClose}>
 				<SettingsIcon className="icon-menu" /> Account settings
 			</MenuItem>
-			<MenuItem onClick={handleMenuClose}>
+			<MenuItem
+				onClick={() => {
+					handleLogout();
+					handleMenuClose();
+				}}>
 				<LogoutIcon className="icon-menu" color="inherit" /> Logout
 			</MenuItem>
 		</Menu>
 	);
 
 	return (
-		<div className="navbar">
+		<div className="navbar" key={generateComponentKey(20)}>
 			<div className="navbar-left">
 				<Link to="/" className="logo-container">
 					<LogoImage className="logo" />
@@ -74,7 +97,7 @@ export default function Navbar() {
 			</div>
 			{!login.authenticated && (
 				<div className="navbar-right">
-					<Link to="/login" className="button signup">
+					<Link to="/signup" className="button signup">
 						SIGN UP
 					</Link>
 					<Link to="/login" className="button login">
@@ -99,7 +122,7 @@ export default function Navbar() {
 						aria-haspopup="true"
 						onClick={handleProfileMenuOpen}
 						color="inherit">
-						<Avatar src="/defaultpfp.jpg" />
+						<Avatar src={`/api/users/${login._id}/avatar`} />
 					</IconButton>
 					{renderMenu}
 				</div>

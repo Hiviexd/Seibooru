@@ -1,0 +1,33 @@
+.follow-button-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+	cursor: pointer;
+	user-select: none;
+
+	.follows-you-alert {
+		font-size: 10px;
+		font-weight: 400;
+		padding: 0px 4px;
+		border-radius: 3px;
+		background-color: #c2336f;
+		margin-right: 10px;
+	}
+
+	.content {
+		border-radius: 1000px;
+		background-color: #2e7ee3;
+		padding: 10px 20px;
+		font-weight: 500;
+		transition: linear 120ms;
+
+		&:hover {
+			background-color: white;
+			color: #2e7ee3;
+		}
+	}
+}

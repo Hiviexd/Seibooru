@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/global/Navbar";
 import { PostSelector } from "../components/listing/PostSelector";
 import "../styles/pages/Post.scss";
@@ -45,7 +46,9 @@ export default function Post() {
 								style={{
 									backgroundImage: `url(/api/users/${postData.posterId}/avatar)`,
 								}}></div>
-							<p className="username">{postData.posterUsername}</p>
+							<Link to={`/users/${postData.posterId}`} className="username">
+								{postData.posterUsername}
+							</Link>
 						</div>
 						<div className="tags-listing">
 							{postData.tags.map((t) => (

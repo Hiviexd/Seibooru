@@ -4,6 +4,7 @@ import Post, { IPost } from "./schemas/Post";
 import { LoggerConsumer } from "../server/helpers/LoggerConsumer";
 import dotenv from "dotenv";
 import paginate from "mongoose-paginate-v2";
+import Follower from "./schemas/Follower";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ interface PostDocument extends mongoose.Document<IPost> {}
 
 Post.plugin(paginate);
 export const users = mongoose.model("User", User);
+export const followers = mongoose.model("Follower", Follower);
 export const posts = mongoose.model<
 	PostDocument,
 	mongoose.PaginateModel<PostDocument>
