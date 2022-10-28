@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { users } from "../../../database";
-import { createWriteStream, unlinkSync } from "fs";
+import { createWriteStream } from "fs";
 import path from "path";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 

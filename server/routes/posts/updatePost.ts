@@ -32,19 +32,20 @@ export default async (req: Request, res: Response) => {
 
 	logger.printInfo(`updating post by ${user.username}`);
 
-	await posts.updateOne(
-		{ _id: id },
-		{
-			$set: {
-				title,
-				tags,
-			},
-		}
-	);
+    title ? post.title = title : null;
+    tags ? post.tags = tags : null;
+
+    const updatedPost = await posts.findOneAndUpdate(
+        { _id: post._id },
+        { title, tags },
+        { new: true }
+    );
 
 	logger.printInfo(`post updated by ${user.username}`);
 
 	return res.status(200).json({
+        status: 200,
 		message: "Post updated",
+        post: updatedPost,
 	});
 };

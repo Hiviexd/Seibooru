@@ -50,7 +50,7 @@ export default function Settings() {
 						variant: "error",
 					});
 
-				enqueueSnackbar("User updated!", {
+				enqueueSnackbar("Profile updated!", {
 					variant: "success",
 				});
 				navigate("/users/" + login._id);
