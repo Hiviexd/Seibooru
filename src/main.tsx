@@ -18,27 +18,31 @@ import { SnackbarProvider } from "notistack";
 import Post from "./pages/Post";
 import { CreatePost } from "./pages/CreatePost";
 import TrendingTagsProvider from "./providers/TrendingTagsContext";
+import { generateComponentKey } from "./utils/generateComponentKey";
+import SearchOverlayProvider from "./providers/SeachOverlayContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<AuthProvider>
 		<TrendingTagsProvider>
-			<SnackbarProvider maxSnack={3} preventDuplicate>
-				<BrowserRouter>
-					<ThemeProvider theme={theme}>
-						<Routes>
-							<Route path="/" element={<Home />} />
-							<Route path="/listing" element={<Listing />} />
-							<Route path="/login" element={<LogIn />} />
-							<Route path="/signup" element={<LogIn />} />
-							<Route path="/posts" element={<Post />} />
-							<Route path="/new" element={<CreatePost />} />
-                            <Route path="/users/:id" element={<Profile />} />
-                            <Route path="/settings" element={<Settings />} />
-							<Route path="*" element={<Listing />} />
-						</Routes>
-					</ThemeProvider>
-				</BrowserRouter>
-			</SnackbarProvider>
+			<SearchOverlayProvider>
+				<SnackbarProvider maxSnack={3} preventDuplicate>
+					<BrowserRouter>
+						<ThemeProvider theme={theme}>
+							<Routes>
+								<Route path="/" element={<Home />} />
+								<Route path="/listing" element={<Listing />} />
+								<Route path="/login" element={<LogIn />} />
+								<Route path="/signup" element={<LogIn />} />
+								<Route path="/posts" element={<Post />} />
+								<Route path="/new" element={<CreatePost />} />
+								<Route path="/users/:id" element={<Profile />} />
+								<Route path="/settings" element={<Settings />} />
+								<Route path="*" element={<Listing />} />
+							</Routes>
+						</ThemeProvider>
+					</BrowserRouter>
+				</SnackbarProvider>
+			</SearchOverlayProvider>
 		</TrendingTagsProvider>
 	</AuthProvider>
 );

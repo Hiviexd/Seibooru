@@ -7,6 +7,7 @@ import { AuthContext } from "../providers/AuthContext";
 import "./../styles/pages/Profile.scss";
 import { useParams } from "react-router-dom";
 import { FollowUserButton } from "../components/UI/FollowUserButton";
+import { generateComponentKey } from "../utils/generateComponentKey";
 
 export default function Profile() {
 	const [profile, setProfile] = useState(null);
@@ -30,7 +31,7 @@ export default function Profile() {
 				setPosts(d.data.posts);
 				setTotalPages(d.data.totalPages);
 			});
-	}, []);
+	}, [id]);
 
 	function refreshListing(page: number) {
 		fetch(`/api/users/${id}/posts?page=${page}`)
@@ -45,13 +46,15 @@ export default function Profile() {
 		<>
 			<Navbar />
 			<div className="profile-layout">
-				<div className="profile">
+				<div className="profile" key={generateComponentKey(10)}>
 					<div className="profile-header">
 						<div className="profile-header-avatar">
 							<div
 								className="profile-pic"
 								style={{
-									backgroundImage: `url(/api/users/${id}/avatar)`,
+									backgroundImage: `url(/api/users/${id}/avatar?nonce=${generateComponentKey(
+										10
+									)})`,
 								}}
 							/>
 						</div>
@@ -62,17 +65,19 @@ export default function Profile() {
 							</div>
 						</div>
 					</div>
-					{profile?.bio && <div className="profile-bio-layout">
-						<div className="profile-bio-title">
-							<h3>Bio:</h3>
+					{profile?.bio && (
+						<div className="profile-bio-layout">
+							<div className="profile-bio-title">
+								<h3>Bio</h3>
+							</div>
+							<div className="profile-bio">
+								<p>{profile?.bio}</p>
+							</div>
 						</div>
-						<div className="profile-bio">
-							<p>{profile?.bio}</p>
-						</div>
-					</div>}
+					)}
 				</div>
 				<div className="profile-posts">
-					{!posts.length ? (
+					{posts.length == 0 ? (
 						<div className="no-posts">
 							<h1>All empty here...</h1>
 							{login._id === profile?._id && <h4>Try posting something!</h4>}
@@ -81,7 +86,7 @@ export default function Profile() {
 						posts.map((post) => <PostSelector post={post} />)
 					)}
 				</div>
-				{posts.length && (
+				{posts.length != 0 ? (
 					<Pagination
 						count={totalPages}
 						page={page}
@@ -90,7 +95,7 @@ export default function Profile() {
 							refreshListing(page);
 						}}
 					/>
-				)}
+				) : null}
 			</div>
 			<PostButton />
 		</>

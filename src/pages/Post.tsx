@@ -9,11 +9,25 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Tooltip from "@mui/material/Tooltip";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import "@emotion/react";
+import "@emotion/styled";
+import { generateComponentKey } from "../utils/generateComponentKey";
 
 export default function Post() {
+	const [deleteOpen, setDeleteOpen] = React.useState(false);
+	const [editOpen, setEditOpen] = React.useState(false);
 	const [postData, setPostData] = useState<any>();
 	const postId = new URLSearchParams(location.search).get("post");
 	const { login } = useContext(AuthContext);
+
+	const handleDeleteOpen = () => {
+		setDeleteOpen(true);
+	};
+	const handleDeleteClose = () => {
+		setDeleteOpen(false);
+	};
 
 	useEffect(() => {
 		fetch(`/api/posts/${postId}`)
@@ -54,6 +68,7 @@ export default function Post() {
 											<IconButton
 												className="button"
 												aria-label="delete"
+												onClick={handleDeleteOpen}
 												size="small"
 												color="error">
 												<DeleteIcon />
@@ -68,7 +83,9 @@ export default function Post() {
 							<div
 								className="profile-pic"
 								style={{
-									backgroundImage: `url(/api/users/${postData.posterId}/avatar)`,
+									backgroundImage: `url(/api/users/${
+										postData.posterId
+									}/avatar?nonce=${generateComponentKey(10)})`,
 								}}></div>
 							<Link to={`/users/${postData.posterId}`} className="username">
 								{postData.posterUsername}
@@ -83,6 +100,21 @@ export default function Post() {
 					</div>
 				</div>
 			</div>
+			<Modal open={deleteOpen} onClose={handleDeleteClose}>
+				<div>
+					<h2 id="modal-modal-title">Delete Post</h2>
+					<p id="modal-modal-description">
+						Are you sure you want to delete this post?
+					</p>
+					<Button
+						variant="contained"
+						color="error"
+						startIcon={<DeleteIcon />}
+						onClick={handleDeleteClose}>
+						Delete
+					</Button>
+				</div>
+			</Modal>
 		</>
 	);
 }

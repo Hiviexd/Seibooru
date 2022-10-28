@@ -27,8 +27,8 @@ Post.plugin(paginate);
 export const users = mongoose.model("User", User);
 export const followers = mongoose.model("Follower", Follower);
 export const posts = mongoose.model<
-	PostDocument,
-	mongoose.PaginateModel<PostDocument>
+	IPost,
+	mongoose.PaginateModel<IPost, PostDocument>
 >("Post", Post);
 // //
 // posts.find().then((post) => {

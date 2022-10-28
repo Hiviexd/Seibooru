@@ -7,21 +7,24 @@ import { Pagination } from "@mui/material";
 import { TrendingTags } from "../components/global/TrendingTags";
 import { TrendingTagsContext } from "../providers/TrendingTagsContext";
 import { PostButton } from "../components/UI/PostButton";
+import { useParams } from "react-router-dom";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
 
 export default function Listing() {
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const trendingTagsContext = useContext(TrendingTagsContext);
+	const { query } = useParams();
 
 	useEffect(() => {
-		fetch(`/api/posts/listing?page=${page}`)
+		fetch(`/api/posts/listing?page=${page}&query=${query || ""}`)
 			.then((r) => r.json())
 			.then((d) => {
 				setPosts(d.data.posts);
 				setTotalPages(d.data.totalPages);
 			});
-	}, []);
+	}, [query]);
 
 	function refreshListing(page: number) {
 		fetch(`/api/posts/listing?page=${page}`)
@@ -35,6 +38,7 @@ export default function Listing() {
 	return (
 		<>
 			<Navbar />
+			<SearchOverlay />
 			<div className="listing_layout">
 				<TrendingTags />
 				<div
@@ -58,7 +62,7 @@ export default function Listing() {
 						}}
 					/>
 				</div>
-                <PostButton />
+				<PostButton />
 			</div>
 		</>
 	);

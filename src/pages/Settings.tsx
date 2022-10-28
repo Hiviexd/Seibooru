@@ -1,11 +1,11 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/global/Navbar";
 import { AuthContext } from "../providers/AuthContext";
 import { Button, TextField } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
 import "./../styles/pages/Settings.scss";
+import { generateComponentKey } from "../utils/generateComponentKey";
 
 export default function Settings() {
 	const [src, setSrc] = useState<any>();
@@ -14,8 +14,17 @@ export default function Settings() {
 	const formData = useRef(new FormData());
 	const { login } = useContext(AuthContext);
 	const { enqueueSnackbar } = useSnackbar();
+	const [userData, setUserData] = useState<any>();
 
-	setSrc(`/api/users/${login._id}/avatar)`);
+	useEffect(() => {
+		setSrc(`/api/users/${login._id}/avatar?nonce=${generateComponentKey(10)}`);
+
+		fetch(`/api/users/${login._id}`)
+			.then((r) => r.json())
+			.then((d) => {
+				setUserData(d.data);
+			});
+	}, []);
 
 	function handleFileInput(ev: any) {
 		if (ev.target.files && ev.target.files[0]) {
@@ -49,6 +58,8 @@ export default function Settings() {
 			});
 	}
 
+	if (!userData) return <></>;
+
 	return (
 		<>
 			<Navbar />
@@ -78,14 +89,12 @@ export default function Settings() {
 							onInput={(ev: any) => {
 								formData.current.set("bio", ev.target.value);
 							}}
+							defaultValue={userData.bio}
+							multiline
 						/>
-						<LoadingButton
-							variant="contained"
-							onClick={updateUser}
-							loading={loading}
-							loadingPosition="start">
+						<Button variant="contained" onClick={updateUser}>
 							Update
-						</LoadingButton>
+						</Button>
 					</div>
 				</div>
 			</div>

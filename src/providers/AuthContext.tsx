@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 
 export interface ILoginUser {
 	_id: string;
+	username: string;
 	accountToken: string;
 	authenticated: boolean;
 }
@@ -9,6 +10,7 @@ export interface ILoginUser {
 const defaultUser = JSON.stringify({
 	_id: "-1",
 	accountToken: "",
+	username: "Guest",
 	authenticated: false,
 });
 

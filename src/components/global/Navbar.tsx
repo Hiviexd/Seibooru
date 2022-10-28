@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
-import { Avatar, IconButton, Badge, Menu, MenuItem, Divider } from "@mui/material";
+import {
+	Avatar,
+	IconButton,
+	Badge,
+	Menu,
+	MenuItem,
+	Divider,
+} from "@mui/material";
 import {
 	AccountCircle,
 	Settings as SettingsIcon,
@@ -14,11 +21,13 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import "./../../styles/components/global/Navbar.scss";
 import { LogoImage } from "../../styles/components/images/Logo";
 import { generateComponentKey } from "../../utils/generateComponentKey";
+import { SearchOverlayContext } from "../../providers/SeachOverlayContext";
 
 export default function Navbar() {
 	const { login, logout } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const isMenuOpen = Boolean(anchorEl);
+	const searchContext = useContext(SearchOverlayContext);
 
 	const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -49,37 +58,41 @@ export default function Navbar() {
 		logout();
 	};
 
+	const handleSearchToggle = () => {
+		searchContext.setOpen(true);
+	};
+
 	const renderMenu = (
 		<Menu
-			//! anchorEl={anchorEl}
-            PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                  bgcolor: '#242424',
-                  mt: 1.5,
-                  '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                  },
-                  '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: '#242424',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                },
-              }}
-            className="navbar-menu"
+			// anchorEl={<Avatar></Avatar>}
+			PaperProps={{
+				elevation: 0,
+				sx: {
+					overflow: "visible",
+					filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+					bgcolor: "#242424",
+					mt: 1.5,
+					"& .MuiAvatar-root": {
+						width: 32,
+						height: 32,
+						ml: -0.5,
+						mr: 1,
+					},
+					"&:before": {
+						content: '""',
+						display: "block",
+						position: "absolute",
+						top: 0,
+						right: 14,
+						width: 10,
+						height: 10,
+						bgcolor: "#242424",
+						transform: "translateY(-50%) rotate(45deg)",
+						zIndex: 0,
+					},
+				},
+			}}
+			className="navbar-menu"
 			anchorOrigin={{
 				vertical: "top",
 				horizontal: "right",
@@ -91,8 +104,8 @@ export default function Navbar() {
 			}}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-                <div className="welcome-text">Welcome back, {login._id}!</div>
-                <Divider sx={{margin: "5px"}} />
+			<div className="welcome-text">Welcome back, {login.username}!</div>
+			<Divider sx={{ margin: "5px" }} />
 			<MenuItem onClick={handleProfileClick}>
 				<AccountCircle className="icon-menu" /> Profile
 			</MenuItem>
@@ -121,10 +134,10 @@ export default function Navbar() {
 					About
 				</Link>
 				<IconButton size="large" aria-label="search" color="inherit">
-					<SearchIcon />
+					<SearchIcon onClick={handleSearchToggle} />
 				</IconButton>
 			</div>
-			{!login.authenticated && (
+			{!login.authenticated ? (
 				<div className="navbar-right">
 					<Link to="/signup" className="button signup">
 						SIGN UP
@@ -133,8 +146,10 @@ export default function Navbar() {
 						LOGIN
 					</Link>
 				</div>
+			) : (
+				<></>
 			)}
-			{login.authenticated && (
+			{login.authenticated ? (
 				<div className="navbar-right">
 					<IconButton
 						size="large"
@@ -151,10 +166,16 @@ export default function Navbar() {
 						aria-haspopup="true"
 						onClick={handleMenuOpen}
 						color="inherit">
-						<Avatar src={`/api/users/${login._id}/avatar`} />
+						<Avatar
+							src={`/api/users/${login._id}/avatar?nonce=${generateComponentKey(
+								10
+							)}`}
+						/>
 					</IconButton>
 					{renderMenu}
 				</div>
+			) : (
+				<></>
 			)}
 		</div>
 	);

@@ -110,16 +110,20 @@
 
 		.profile-bio {
 			width: 100%;
+			max-height: 200px;
 			font-size: 1.1em;
 			font-weight: 300;
 			text-align: left;
-			background-color: #ffffff10;
+			background-color: rgba(255, 255, 255, 0.062745098);
 			border-radius: 10px;
-            padding: 1em;
-            
-            p {
-                line-break: strict;
-            }
+			padding: 1em;
+			line-break: auto;
+			white-space: break-spaces;
+			overflow-y: auto;
+
+			p {
+				line-break: strict;
+			}
 		}
 	}
 }
