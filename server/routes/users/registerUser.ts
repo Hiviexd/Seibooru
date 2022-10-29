@@ -51,7 +51,7 @@ export default async (req: Request, res: Response) => {
 		accountToken: accountToken,
 		passwordHash: passwordHash,
 		createdAt: new Date(),
-		permissions: ["post:create", "post:update", "post:delete"],
+		permissions: ["post:create"],
         bio: "Hello, world!"
 	});
 

@@ -5,7 +5,7 @@ import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("banUser", req);
     const adminPerms = ["admin:user", "admin:post"];
-    const userPerms = ["post:create", "post:update", "post:delete"];
+    const userPerms = ["post:create"];
     
     logger.printInfo(`Banning user ${req.params.id}`);
 

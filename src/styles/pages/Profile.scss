@@ -92,6 +92,25 @@
 		}
 	}
 
+    .profile-date {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        text-align: left;
+        margin-top: 30px;
+        padding: 1em 0 1em 0;
+        border-top: 2px solid #3f3f3f;
+        //border-bottom: 2px solid #3f3f3f;
+
+        .profile-date-text {
+            margin-right: 5px;
+        }
+
+        .date{
+            font-weight: 300;
+        }
+    }
+
 	.profile-bio-layout {
 		display: flex !important;
 		width: 100%;
@@ -100,6 +119,7 @@
 		align-items: center;
 		align-content: center;
 		flex-wrap: nowrap;
+        border-top: 2px solid #3f3f3f;
 
 		.profile-bio-title {
 			width: 100%;

@@ -3,7 +3,7 @@ import { LoggerConsumer } from "../helpers/LoggerConsumer";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     const logger = new LoggerConsumer("isBanned", req);
-    const userPerms = ["post:create", "post:update", "post:delete"];
+    const userPerms = ["post:create"];
 
     if (!req.body._MANAGER.permissions.some((perm: string) => userPerms.includes(perm))) {
         logger.printError("Unauthorized");

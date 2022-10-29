@@ -113,7 +113,7 @@ export default function Navbar() {
 				<SettingsIcon className="icon-menu" /> Account settings
 			</MenuItem>
 			<MenuItem onClick={handleLogout}>
-				<LogoutIcon className="icon-menu" color="inherit" /> Logout
+				<LogoutIcon className="icon-menu" color="inherit" /> Log out
 			</MenuItem>
 		</Menu>
 	);

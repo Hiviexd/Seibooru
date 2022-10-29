@@ -9,8 +9,8 @@ export default new Schema({
 	bio: String,
 	permissions: {
 		type: Array,
-		default: ["post:create", "post:update", "post:delete"],
-		//? Available permissions: post:create, post:update, post:delete, admin:post, admin:user
+		default: ["post:create"],
+		//? Available permissions: post:create, admin:post, admin:user
 	},
 	createdAt: Date,
 });

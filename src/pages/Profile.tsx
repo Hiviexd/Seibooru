@@ -1,5 +1,7 @@
 import { useState, useEffect, useContext } from "react";
+import moment from "moment";
 import Navbar from "../components/global/Navbar";
+import Tooltip from "@mui/material/Tooltip";
 import { PostSelector } from "../components/listing/PostSelector";
 import { Pagination } from "@mui/material";
 import { PostButton } from "../components/UI/PostButton";
@@ -7,6 +9,7 @@ import { AuthContext } from "../providers/AuthContext";
 import "./../styles/pages/Profile.scss";
 import { useParams } from "react-router-dom";
 import { FollowUserButton } from "../components/UI/FollowUserButton";
+import { SettingsButton } from "../components/UI/SettingsButton";
 import { generateComponentKey } from "../utils/generateComponentKey";
 
 export default function Profile() {
@@ -61,10 +64,21 @@ export default function Profile() {
 						<div className="profile-header-info">
 							<div className="name-and-followers">
 								<h1 className="profile-name">{profile?.username}</h1>
-								<FollowUserButton userId={id} />
+								{login._id === profile?._id ? <SettingsButton /> : <FollowUserButton userId={id} />}
 							</div>
 						</div>
 					</div>
+                    <div className="profile-date">
+							<div className="profile-date-text">Joined</div>
+							<Tooltip
+								title={moment(profile?.createdAt).format(
+									"MMMM Do YYYY, h:mm:ss A"
+								)}>
+								<div className="date">
+									{moment(profile?.createdAt).fromNow()}
+								</div>
+							</Tooltip>
+						</div>
 					{profile?.bio && (
 						<div className="profile-bio-layout">
 							<div className="profile-bio-title">

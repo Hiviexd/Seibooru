@@ -5,7 +5,7 @@ import ownerUsername from "../../config.json";
 export default async (req: Request, res: Response, next: NextFunction) => {
     const logger = new LoggerConsumer("isOwner", req);
 
-    if (req.body._MANAGER.username != ownerUsername) {
+    if (req.body._MANAGER.safeUsername != ownerUsername) {
         logger.printError("Unauthorized");
         return res.status(401).send({
             status: 401,

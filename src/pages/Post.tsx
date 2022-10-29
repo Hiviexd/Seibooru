@@ -23,10 +23,12 @@ import moment from "moment";
 import "@emotion/react";
 import "@emotion/styled";
 import { generateComponentKey } from "../utils/generateComponentKey";
+import isAdmin from "../helpers/isAdmin";
 
 export default function Post() {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
+    const [currentUser, setCurrentUser] = useState<any>();
 	const [openDelete, setOpenDelete] = React.useState(false);
 	const [openEdit, setOpenEdit] = React.useState(false);
 	const [postData, setPostData] = useState<any>();
@@ -131,6 +133,12 @@ export default function Post() {
 			.then((d) => {
 				setPostData(d.data);
 			});
+
+        fetch(`/api/users/${login._id}`)
+            .then((r) => r.json())
+            .then((d) => {
+                setCurrentUser(d.data); //! isnt working for some reason
+            });
 	}, []);
 
 	if (!postData) return <></>;
@@ -150,7 +158,7 @@ export default function Post() {
 						<div className="title-and-buttons-container">
 							<p className="title">{postData.title}</p>
 							<div className="buttons-container">
-								{login._id === postData.posterId && (
+								{(login._id === postData.posterId /*|| isAdmin(currentUser)*/) && (
 									<>
 										<Tooltip title="Edit">
 											<IconButton

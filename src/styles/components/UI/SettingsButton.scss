@@ -1,0 +1,24 @@
+.settings-button {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+	cursor: pointer;
+	user-select: none;
+
+	.content {
+		border-radius: 1000px;
+		background-color: #2e7ee3;
+		padding: 10px 20px;
+		font-weight: 500;
+		transition: linear 120ms;
+
+		&:hover {
+			background-color: white;
+			color: #2e7ee3;
+		}
+	}
+}
