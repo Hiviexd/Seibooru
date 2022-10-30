@@ -1,8 +1,10 @@
-import { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { posts, users } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
+import isAdmin from "../../middlewares/isAdmin";
 
 export default async (req: Request, res: Response) => {
+    const router = Router();
 	const logger = new LoggerConsumer("updatePost", req);
 	const id = req.params.id;
 	const post = await posts.findById(id);
@@ -25,10 +27,8 @@ export default async (req: Request, res: Response) => {
 	}
 
 	if (post.posterId !== user._id) {
-		return res.status(401).json({
-			message: "Unauthorized",
-		});
-	}
+        router.use(isAdmin);
+    }
 
 	logger.printInfo(`updating post by ${user.username}`);
 

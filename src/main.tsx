@@ -20,6 +20,7 @@ import { CreatePost } from "./pages/CreatePost";
 import TrendingTagsProvider from "./providers/TrendingTagsContext";
 import { generateComponentKey } from "./utils/generateComponentKey";
 import SearchOverlayProvider from "./providers/SeachOverlayContext";
+import Navbar from "./components/global/Navbar";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<AuthProvider>
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 				<SnackbarProvider maxSnack={3} preventDuplicate>
 					<BrowserRouter>
 						<ThemeProvider theme={theme}>
+                        <Navbar />
 							<Routes>
 								<Route path="/" element={<Home />} />
 								<Route path="/listing" element={<Listing />} />

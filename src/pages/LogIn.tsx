@@ -1,9 +1,8 @@
 import { VisibilityOff, Visibility, Error } from "@mui/icons-material";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/global/Navbar";
 import { AuthContext } from "../providers/AuthContext";
 import "../styles/pages/LogIn.scss";
 
@@ -226,7 +225,6 @@ export default function LogIn() {
 
 	return (
 		<>
-			<Navbar />
 			<div className="log__in__layout">
 				<div className={loading ? "form loading" : "form"}>
 					{signup ? <SignUpOptions /> : <LogInOptions />}

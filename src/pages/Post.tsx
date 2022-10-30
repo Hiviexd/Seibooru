@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/global/Navbar";
 import { AuthContext } from "../providers/AuthContext";
 import { useSnackbar } from "notistack";
 import { useNavigate, redirect } from "react-router-dom";
@@ -8,6 +7,8 @@ import "../styles/pages/Post.scss";
 import { TrendingTags } from "../components/global/TrendingTags";
 import { LikeButton } from "../components/UI/LikeButton";
 import { PostButton } from "../components/UI/PostButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,12 +24,13 @@ import moment from "moment";
 import "@emotion/react";
 import "@emotion/styled";
 import { generateComponentKey } from "../utils/generateComponentKey";
-import isAdmin from "../helpers/isAdmin";
+import checkAdmin from "../helpers/checkAdmin";
 
 export default function Post() {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
-    const [currentUser, setCurrentUser] = useState<any>();
+	const [isAdmin, setIsAdmin] = useState(false);
+	const [isAdminPoster, setIsAdminPoster] = useState(false);
 	const [openDelete, setOpenDelete] = React.useState(false);
 	const [openEdit, setOpenEdit] = React.useState(false);
 	const [postData, setPostData] = useState<any>();
@@ -132,20 +134,24 @@ export default function Post() {
 			.then((r) => r.json())
 			.then((d) => {
 				setPostData(d.data);
+				fetch(`/api/users/${d.data.posterId}`)
+					.then((r) => r.json())
+					.then((d) => {
+						setIsAdminPoster(checkAdmin(d.data));
+					});
 			});
 
-        fetch(`/api/users/${login._id}`)
-            .then((r) => r.json())
-            .then((d) => {
-                setCurrentUser(d.data); //! isnt working for some reason
-            });
+		fetch(`/api/users/${login._id}`)
+			.then((r) => r.json())
+			.then((d) => {
+				setIsAdmin(checkAdmin(d.data));
+			});
 	}, []);
 
 	if (!postData) return <></>;
 
 	return (
 		<>
-			<Navbar />
 			<div className="post_page_layout">
 				<TrendingTags />
 				<div className="scrollable">
@@ -158,7 +164,7 @@ export default function Post() {
 						<div className="title-and-buttons-container">
 							<p className="title">{postData.title}</p>
 							<div className="buttons-container">
-								{(login._id === postData.posterId /*|| isAdmin(currentUser)*/) && (
+								{(login._id === postData.posterId || isAdmin) && (
 									<>
 										<Tooltip title="Edit">
 											<IconButton
@@ -206,6 +212,13 @@ export default function Post() {
 							<Link to={`/users/${postData.posterId}`} className="username">
 								{postData.posterUsername}
 							</Link>
+							{isAdminPoster && (
+								<div className="admin-icon">
+									<Tooltip title="Admin">
+										<FontAwesomeIcon icon={faShieldHalved} />
+									</Tooltip>
+								</div>
+							)}
 						</div>
 						<div className="tags-label">Tags</div>
 						<div className="tags-listing">
@@ -269,7 +282,7 @@ export default function Post() {
 						label="Tags"
 						type="text"
 						fullWidth
-						defaultValue={sanitizeTags(postData.tags)[0].split(",").join(" ")}
+						defaultValue={sanitizeTags(postData.tags).join(" ")}
 						onBlur={(e) =>
 							setTags(e.target.value.toLowerCase().trim().split(" "))
 						}

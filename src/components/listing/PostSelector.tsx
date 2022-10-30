@@ -1,15 +1,15 @@
 import "../../styles/components/listing/PostSelector.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { AuthContext } from "../../providers/AuthContext";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
-import { generateComponentKey } from "../../utils/generateComponentKey";
+import checkAdmin from "../../helpers/checkAdmin";
 import { LikeButton } from "../UI/LikeButton";
+import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
+import Tooltip from "@mui/material/Tooltip";
 
 export const PostSelector = ({ post }: { post: any }) => {
 	const navigate = useNavigate();
+	const [isAdminPoster, setIsAdminPoster] = useState(false);
 
 	function goTo(path: string) {
 		navigate(path);
@@ -22,6 +22,14 @@ export const PostSelector = ({ post }: { post: any }) => {
 	function handleUserAvatarClick() {
 		goTo(`/users/${post.posterId}`);
 	}
+
+	useEffect(() => {
+		fetch(`/api/users/${post.posterId}`)
+			.then((r) => r.json())
+			.then((d) => {
+				setIsAdminPoster(checkAdmin(d.data));
+			});
+	}, []);
 
 	return (
 		<>
@@ -40,6 +48,13 @@ export const PostSelector = ({ post }: { post: any }) => {
 						<Link to={`/users/${post.posterId}`} className="username">
 							{post.posterUsername}
 						</Link>
+						{isAdminPoster && (
+							<div className="admin-icon">
+								<Tooltip title="Admin">
+									<FontAwesomeIcon icon={faShieldHalved} />
+								</Tooltip>
+							</div>
+						)}
 					</div>
 					<LikeButton post={post} />
 				</div>

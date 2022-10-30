@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { generateComponentKey } from "../../utils/generateComponentKey";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 import "./../../styles/components/UI/SettingsButton.scss";
 
 export function SettingsButton() {
@@ -12,7 +14,7 @@ export function SettingsButton() {
 			<div
 				className="content"
 				onClick={() => navigate("/settings")}>
-				{"Settings"}
+				<FontAwesomeIcon icon={faGear} /> {"Settings"}
 			</div>
 		</div>
     );

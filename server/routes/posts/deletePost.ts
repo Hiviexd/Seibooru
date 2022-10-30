@@ -1,8 +1,10 @@
-import { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { posts, users } from "../../../database";
+import isAdmin from "../../middlewares/isAdmin";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 
 export default async (req: Request, res: Response) => {
+    const router = Router();
 	const logger = new LoggerConsumer("deletePost", req);
 	const id = req.params.id;
 	const post = await posts.findById(id);
@@ -24,10 +26,8 @@ export default async (req: Request, res: Response) => {
 	}
 
 	if (post.posterId !== user._id) {
-		return res.status(401).json({
-			message: "Unauthorized",
-		});
-	}
+        router.use(isAdmin);
+    }
 
 	logger.printInfo("Deleting post");
 

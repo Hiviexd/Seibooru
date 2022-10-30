@@ -108,11 +108,19 @@
 				background-repeat: no-repeat;
 			}
 
+            .admin-icon {
+                width: 20px;
+                height: 20px;
+                color: #07f472;
+                margin-left: 0.3em;
+            }
+
 			.username {
 				font-size: 20px;
 				font-weight: 500;
 				text-decoration: none;
 				color: #fff;
+
 
 				&:hover {
 					text-decoration: underline;

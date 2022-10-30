@@ -30,7 +30,7 @@
 		justify-content: flex-start;
 		align-content: center;
 		align-items: center;
-		width: 90%;
+		width: 53%;
 		max-width: 1000px;
 		height: fit-content;
 		padding: 2em;
@@ -78,15 +78,22 @@
 					justify-content: space-between;
 					align-items: center;
 					margin-left: 2.5%;
-				}
 
-				.profile-name {
-					width: 100%;
-					font-size: 1.8em;
-					font-weight: 600;
-					margin-bottom: 0.5em;
-					color: #ffffff;
-					text-align: left;
+                    .profile-name {
+                        display: flex;
+                        flex-direction: row;
+                        width: fit-content;
+                        font-size: 1.8em;
+                        font-weight: 600;
+                        margin: 0.5em 0 0.5em 0;
+                        color: #ffffff;
+                        text-align: left;
+                    }
+                    
+                    .admin-icon {
+                        color: #07f472;
+                        margin-left: 0.3em;
+                    }
 				}
 			}
 		}

@@ -3,7 +3,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useSnackbar } from "notistack";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/global/Navbar";
 import { TrendingTags } from "../components/global/TrendingTags";
 import { AuthContext } from "../providers/AuthContext";
 import "./../styles/pages/CreatePost.scss";
@@ -50,7 +49,6 @@ export function CreatePost() {
 
 	return (
 		<>
-			<Navbar />
 			<div className="create-post-layout">
 				<TrendingTags />
 				<div className="scrollable">

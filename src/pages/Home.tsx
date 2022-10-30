@@ -1,11 +1,8 @@
-import React from "react";
-import Navbar from "../components/global/Navbar";
 import "../styles/pages/Home.scss";
 
 export default function Home() {
 	return (
 		<>
-			<Navbar />
 			<div className="home">
 				<div className="home__content">
 					<div className="home__text">

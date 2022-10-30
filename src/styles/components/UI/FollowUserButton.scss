@@ -30,4 +30,15 @@
 			color: #2e7ee3;
 		}
 	}
+
+    .following {
+        color: #2e7ee3 !important; 
+        background-color: #ffffff !important;
+        transition: linear 120ms;
+
+        &:hover {
+            background-color: #ff5050 !important;
+            color: #ffffff !important;
+        }
+    }
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import moment from "moment";
-import Navbar from "../components/global/Navbar";
 import Tooltip from "@mui/material/Tooltip";
 import { PostSelector } from "../components/listing/PostSelector";
 import { Pagination } from "@mui/material";
@@ -11,9 +10,13 @@ import { useParams } from "react-router-dom";
 import { FollowUserButton } from "../components/UI/FollowUserButton";
 import { SettingsButton } from "../components/UI/SettingsButton";
 import { generateComponentKey } from "../utils/generateComponentKey";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
+import checkAdmin from "../helpers/checkAdmin";
 
 export default function Profile() {
 	const [profile, setProfile] = useState(null);
+	const [isAdmin, setIsAdmin] = useState(false);
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
@@ -26,6 +29,7 @@ export default function Profile() {
 			.then((r) => r.json())
 			.then((d) => {
 				setProfile(d.data);
+				setIsAdmin(checkAdmin(d.data));
 			});
 
 		fetch(`/api/users/${id}/posts?page=${page}`)
@@ -47,7 +51,6 @@ export default function Profile() {
 
 	return (
 		<>
-			<Navbar />
 			<div className="profile-layout">
 				<div className="profile" key={generateComponentKey(10)}>
 					<div className="profile-header">
@@ -63,22 +66,33 @@ export default function Profile() {
 						</div>
 						<div className="profile-header-info">
 							<div className="name-and-followers">
-								<h1 className="profile-name">{profile?.username}</h1>
-								{login._id === profile?._id ? <SettingsButton /> : <FollowUserButton userId={id} />}
+								<div className="profile-name">
+									{profile?.username}
+									{isAdmin && (
+										<div className="admin-icon">
+											<Tooltip title="Admin">
+												<FontAwesomeIcon icon={faShieldHalved} />
+											</Tooltip>
+										</div>
+									)}
+								</div>
+								{login._id === profile?._id ? (
+									<SettingsButton />
+								) : (
+									<FollowUserButton userId={id} />
+								)}
 							</div>
 						</div>
 					</div>
-                    <div className="profile-date">
-							<div className="profile-date-text">Joined</div>
-							<Tooltip
-								title={moment(profile?.createdAt).format(
-									"MMMM Do YYYY, h:mm:ss A"
-								)}>
-								<div className="date">
-									{moment(profile?.createdAt).fromNow()}
-								</div>
-							</Tooltip>
-						</div>
+					<div className="profile-date">
+						<div className="profile-date-text">Joined</div>
+						<Tooltip
+							title={moment(profile?.createdAt).format(
+								"MMMM Do YYYY, h:mm:ss A"
+							)}>
+							<div className="date">{moment(profile?.createdAt).fromNow()}</div>
+						</Tooltip>
+					</div>
 					{profile?.bio && (
 						<div className="profile-bio-layout">
 							<div className="profile-bio-title">
