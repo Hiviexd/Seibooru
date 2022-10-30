@@ -134,6 +134,7 @@ export default function Post() {
 			.then((r) => r.json())
 			.then((d) => {
 				setPostData(d.data);
+                setTags(d.data.tags);
 				fetch(`/api/users/${d.data.posterId}`)
 					.then((r) => r.json())
 					.then((d) => {

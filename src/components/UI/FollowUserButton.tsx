@@ -22,6 +22,7 @@ export function FollowUserButton({ userId }: { userId: string }) {
 	>();
 	const { login } = useContext(AuthContext);
 	const [following, setFollowing] = useState(false);
+    //? https://bobbyhadz.com/blog/react-on-hover-show-text#show-text-when-hovering-over-an-element-in-react
     const [isHovering, setIsHovering] = useState(false);
 
     const handleMouseOver = () => {

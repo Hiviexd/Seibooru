@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import checkAdmin from "../../helpers/checkAdmin";
+import checkBan from "../../helpers/checkBan";
 import { LikeButton } from "../UI/LikeButton";
 import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "@mui/material/Tooltip";
@@ -10,6 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 export const PostSelector = ({ post }: { post: any }) => {
 	const navigate = useNavigate();
 	const [isAdminPoster, setIsAdminPoster] = useState(false);
+    const [isBanned, setIsBanned] = useState(false);
 
 	function goTo(path: string) {
 		navigate(path);
@@ -28,12 +30,14 @@ export const PostSelector = ({ post }: { post: any }) => {
 			.then((r) => r.json())
 			.then((d) => {
 				setIsAdminPoster(checkAdmin(d.data));
+                setIsBanned(checkBan(d.data));
 			});
 	}, []);
 
 	return (
 		<>
-			<div className="post_selector">
+			{isBanned ? <></> : (
+            <div className="post_selector">
 				<div
 					className="image"
 					style={{
@@ -59,6 +63,7 @@ export const PostSelector = ({ post }: { post: any }) => {
 					<LikeButton post={post} />
 				</div>
 			</div>
+            )}
 		</>
 	);
 };

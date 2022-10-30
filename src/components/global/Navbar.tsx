@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthContext";
 import { useContext } from "react";
@@ -22,10 +22,13 @@ import "./../../styles/components/global/Navbar.scss";
 import { LogoImage } from "../../styles/components/images/Logo";
 import { generateComponentKey } from "../../utils/generateComponentKey";
 import { SearchOverlayContext } from "../../providers/SeachOverlayContext";
+import Alert from '@mui/material/Alert';
+import checkBan from "../../helpers/checkBan";
 
 export default function Navbar() {
 	const { login, logout } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
+    const [isBanned, setIsBanned] = useState(false);
 	const isMenuOpen = Boolean(anchorEl);
 	const searchContext = useContext(SearchOverlayContext);
 
@@ -61,6 +64,14 @@ export default function Navbar() {
 	const handleSearchToggle = () => {
 		searchContext.setOpen(true);
 	};
+
+    useEffect(() => {
+        fetch(`/api/users/${login._id}`)
+            .then((r) => r.json())
+            .then((d) => {
+                setIsBanned(checkBan(d.data));
+            });
+    }, [login]);
 
 	const renderMenu = (
 		<Menu
@@ -119,6 +130,7 @@ export default function Navbar() {
 	);
 
 	return (
+        <>
 		<div className="navbar" key={generateComponentKey(20)}>
 			<div className="navbar-left">
 				<Link to="/" className="logo-container">
@@ -178,5 +190,7 @@ export default function Navbar() {
 				<></>
 			)}
 		</div>
+        {isBanned && <Alert variant="filled" severity="error">You are currently banned for violating the rules. Contact an Admin if you think this is a mistake.</Alert>}
+        </>
 	);
 }

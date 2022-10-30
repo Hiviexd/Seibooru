@@ -88,11 +88,29 @@
                         margin: 0.5em 0 0.5em 0;
                         color: #ffffff;
                         text-align: left;
+                        align-items: center;
                     }
                     
                     .admin-icon {
                         color: #07f472;
                         margin-left: 0.3em;
+                    }
+
+                    .banned-icon {
+                        height: auto;
+                        color: #ff5050;
+                        margin-left: 0.3em;
+                    }
+
+                    .profile-buttons {
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        align-content: center;
+                        justify-content: flex-end;
+                        align-items: center;
+                        width: 100%;
+                        margin-top: 0.5em;
                     }
 				}
 			}

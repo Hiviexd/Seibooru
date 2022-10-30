@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ export function CreatePost() {
 	const formData = useRef(new FormData());
 	const { login } = useContext(AuthContext);
 	const { enqueueSnackbar } = useSnackbar();
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	function handleFileInput(ev: any) {
 		if (ev.target.files && ev.target.files[0]) {
@@ -34,15 +34,17 @@ export function CreatePost() {
 		})
 			.then((r) => r.json())
 			.then((d) => {
-				if (d.status != 200)
+				if (d.status != 200) {
+					setLoading(false);
 					return enqueueSnackbar(d.message, {
 						variant: "error",
 					});
+				}
 
-                enqueueSnackbar("Post created!", {
-                    variant: "success",
-                });
-                navigate("/listing");
+				enqueueSnackbar("Post created!", {
+					variant: "success",
+				});
+				navigate("/listing");
 				setLoading(false);
 			});
 	}

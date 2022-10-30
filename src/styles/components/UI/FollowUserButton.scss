@@ -1,4 +1,5 @@
 .follow-button-container {
+    justify-self: flex-end;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
@@ -8,6 +9,7 @@
 	width: fit-content;
 	cursor: pointer;
 	user-select: none;
+    margin-right: 10px;
 
 	.follows-you-alert {
 		font-size: 10px;

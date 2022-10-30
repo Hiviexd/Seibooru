@@ -19,7 +19,7 @@ export default async (req: Request, res: Response) => {
     }
 
     //? exclude already unbanned users
-    if (!user.permissions.some((perm: string) => userPerms.includes(perm))) {
+    if (user.permissions.some((perm: string) => userPerms.includes(perm))) {
         logger.printError("User is not banned");
         return res.status(400).send({
             status: 400,
