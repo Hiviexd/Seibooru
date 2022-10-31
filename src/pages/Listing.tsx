@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import Navbar from "../components/global/Navbar";
 import { PostSelector } from "../components/listing/PostSelector";
 import "../styles/pages/Listing.scss";
 import { generateComponentKey } from "../utils/generateComponentKey";
@@ -36,6 +37,7 @@ export default function Listing() {
 
 	return (
 		<>
+            <Navbar />
 			<SearchOverlay />
 			<div className="listing_layout">
 				<TrendingTags />

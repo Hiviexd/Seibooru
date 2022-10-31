@@ -1,0 +1,44 @@
+.about-page {
+	width: 100%;
+	height: fit-content;
+    display: flex;
+	flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+	.content {
+		width: fit-content;
+		height: fit-content;
+        margin-top: 3em;
+        padding: 2em;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-content: center;
+		align-items: center;
+        background-color: #ffffff10;
+        border-radius: 10px;
+
+        img{
+            max-width: 500px;
+            max-height: auto;
+            width: auto;
+            height: auto;
+            margin-bottom: 2em;
+        }
+
+        .description {
+            font-weight: 600;
+            font-size: 1.8em;
+            margin-bottom: 1em;
+        }
+
+        .heart {
+            color: #ff66ab;
+            width: 0.9em;
+            height: auto;
+        }
+	}
+}

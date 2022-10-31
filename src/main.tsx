@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./styles/index.scss";
@@ -11,6 +10,7 @@ import Listing from "./pages/Listing";
 import LogIn from "./pages/LogIn";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import About from "./pages/About";
 import theme from "./theme";
 import { ThemeProvider } from "@emotion/react";
 import AuthProvider from "./providers/AuthContext";
@@ -18,9 +18,8 @@ import { SnackbarProvider } from "notistack";
 import Post from "./pages/Post";
 import { CreatePost } from "./pages/CreatePost";
 import TrendingTagsProvider from "./providers/TrendingTagsContext";
-import { generateComponentKey } from "./utils/generateComponentKey";
 import SearchOverlayProvider from "./providers/SeachOverlayContext";
-import Navbar from "./components/global/Navbar";
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<AuthProvider>
@@ -29,7 +28,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 				<SnackbarProvider maxSnack={3} preventDuplicate>
 					<BrowserRouter>
 						<ThemeProvider theme={theme}>
-                        <Navbar />
 							<Routes>
 								<Route path="/" element={<Home />} />
 								<Route path="/listing" element={<Listing />} />
@@ -39,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 								<Route path="/new" element={<CreatePost />} />
 								<Route path="/users/:id" element={<Profile />} />
 								<Route path="/settings" element={<Settings />} />
+                                <Route path="/about" element={<About />} />
 								<Route path="*" element={<Listing />} />
 							</Routes>
 						</ThemeProvider>

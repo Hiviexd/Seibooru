@@ -1,4 +1,5 @@
 import { Button, TextField } from "@mui/material";
+import Navbar from "../components/global/Navbar";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
 import { useContext, useRef, useState } from "react";
@@ -51,6 +52,7 @@ export function CreatePost() {
 
 	return (
 		<>
+            <Navbar />
 			<div className="create-post-layout">
 				<TrendingTags />
 				<div className="scrollable">

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import moment from "moment";
+import Navbar from "../components/global/Navbar";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -13,8 +14,7 @@ import { FollowUserButton } from "../components/UI/FollowUserButton";
 import { SettingsButton } from "../components/UI/SettingsButton";
 import { generateComponentKey } from "../utils/generateComponentKey";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShieldHalved } from "@fortawesome/free-solid-svg-icons";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faShieldHalved, faTriangleExclamation, faAddressCard } from "@fortawesome/free-solid-svg-icons";
 import checkAdmin from "../helpers/checkAdmin";
 import checkBan from "../helpers/checkBan";
 import checkOwner from "../helpers/checkOwner";
@@ -38,6 +38,7 @@ export default function Profile() {
 	const [profile, setProfile] = useState(null);
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [isBanned, setIsBanned] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
 	const [activeUserIsAdmin, setActiveUserIsAdmin] = useState(false);
 	const [activeUserIsOwner, setActiveUserIsOwner] = useState(false);
 	const [posts, setPosts] = useState([]);
@@ -55,6 +56,7 @@ export default function Profile() {
 				setProfile(d.data);
 				setIsAdmin(checkAdmin(d.data));
 				setIsBanned(checkBan(d.data));
+                setIsOwner(checkOwner(d.data));
 			});
 
 		fetch(`/api/users/${id}/posts?page=${page}`)
@@ -231,6 +233,7 @@ export default function Profile() {
 	);
 	return (
 		<>
+            <Navbar />
 			{!isBanned || activeUserIsAdmin || login._id === id ? (
 				<div className="profile-layout">
 					<div className="profile" key={generateComponentKey(10)}>
@@ -249,7 +252,13 @@ export default function Profile() {
 								<div className="name-and-followers">
 									<div className="profile-name">
 										{profile?.username}
-										{isAdmin && (
+                                        {isOwner && (<div className="owner-icon">
+												<Tooltip title="Owner">
+													<FontAwesomeIcon icon={faAddressCard} />
+												</Tooltip>
+											</div>
+										)}
+										{isAdmin && !isOwner && (
 											<div className="admin-icon">
 												<Tooltip title="Admin">
 													<FontAwesomeIcon icon={faShieldHalved} />
@@ -259,7 +268,7 @@ export default function Profile() {
 										{isBanned && (
 											<div className="banned-icon">
 												<Tooltip title="Banned">
-													<FontAwesomeIcon icon={faCircleExclamation} />
+													<FontAwesomeIcon icon={faTriangleExclamation} />
 												</Tooltip>
 											</div>
 										)}

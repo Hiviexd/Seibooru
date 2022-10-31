@@ -1,4 +1,5 @@
 import { useState, useRef, useContext, useEffect } from "react";
+import Navbar from "../components/global/Navbar";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthContext";
 import { Button, TextField } from "@mui/material";
@@ -61,6 +62,7 @@ export default function Settings() {
 
 	return (
 		<>
+            <Navbar />
 			<div className="settings-layout">
 				<div className="scrollable">
 					<div className="form">

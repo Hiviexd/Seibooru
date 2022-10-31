@@ -32,6 +32,9 @@ export default function Navbar() {
 	const isMenuOpen = Boolean(anchorEl);
 	const searchContext = useContext(SearchOverlayContext);
 
+    // make background color transparet if route is "/"
+    const [isHome, setIsHome] = useState("#2e7ee3");
+
 	const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -64,6 +67,14 @@ export default function Navbar() {
 	const handleSearchToggle = () => {
 		searchContext.setOpen(true);
 	};
+
+    useEffect(() => {
+        if (window.location.pathname === "/") {
+            setIsHome("transparent");
+        } else {
+            setIsHome("#2e7ee3");
+        }
+    }, [window.location.pathname]);
 
     useEffect(() => {
         fetch(`/api/users/${login._id}`)
@@ -131,7 +142,7 @@ export default function Navbar() {
 
 	return (
         <>
-		<div className="navbar" key={generateComponentKey(20)}>
+		<div className="navbar" key={generateComponentKey(20)} style={{ backgroundColor: isHome }} >
 			<div className="navbar-left">
 				<Link to="/" className="logo-container">
 					<LogoImage className="logo" />
