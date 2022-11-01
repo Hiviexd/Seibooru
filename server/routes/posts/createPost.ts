@@ -94,9 +94,7 @@ export default async (req: Request, res: Response) => {
 	function sanitizeTitle() {
 		const title = req.body.title;
 
-		if (!title || typeof title != "string") return req.file?.originalname;
-
-		if (title.trim() == "") return req.file?.originalname;
+		if (!title || typeof title != "string" || title.trim() == "") return req.file?.originalname.split(".").slice(0, -1).join(".");
 
 		return title.trim();
 	}

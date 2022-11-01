@@ -13,6 +13,7 @@ import { faShieldHalved, faAddressCard } from "@fortawesome/free-solid-svg-icons
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import DownloadIcon from "@mui/icons-material/Download";
 import Tooltip from "@mui/material/Tooltip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -193,6 +194,37 @@ export default function Post() {
 										</Tooltip>
 									</>
 								)}
+                                <Tooltip title="Download">
+                                    <IconButton
+                                        className="button"
+                                        aria-label="download"
+                                        onClick={() => {
+                                            //download image
+                                            fetch(`/api/posts/${postData._id}/image`)
+                                                .then((r) => r.blob())
+                                                .then((blob) => {
+                                                    const url = window.URL.createObjectURL(
+                                                        new Blob([blob])
+                                                    );
+                                                    const link = document.createElement(
+                                                        "a" 
+                                                    );
+                                                    link.href = url;
+                                                    const filename = postData.filename.split(".")
+                                                    link.setAttribute(
+                                                        "download",
+                                                        `${postData.title}.${filename[filename.length - 1]}`
+                                                    );
+                                                    document.body.appendChild(link);
+                                                    link.click();
+                                                    link.parentNode.removeChild(link);
+                                                });
+                                        }}
+                                        size="small"
+                                        color="success">
+                                        <DownloadIcon />
+                                    </IconButton>
+                                </Tooltip>
 								<LikeButton post={postData} />
 							</div>
 						</div>
