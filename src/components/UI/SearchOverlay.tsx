@@ -79,7 +79,7 @@ export function SearchOverlay() {
 					ref={inputRef}
 					type="text"
 					value={search}
-					placeholder="Type here..."
+					placeholder="Search.."
 					onInput={handleSearchInput}
 					onKeyDown={handleKeyDown}></input>
 				<div className="button" onClick={handleSearch}>

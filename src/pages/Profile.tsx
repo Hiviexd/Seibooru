@@ -64,7 +64,7 @@ export default function Profile() {
 
 	useEffect(() => {
 		setActiveUserIsOwner(login.permissions.includes("admin:admin"));
-		setActiveUserIsAdmin(login.permissions.includes("admin:user"));
+		setActiveUserIsAdmin(login.permissions.includes("admin:user" || "admin:admin"));
 
 		fetch(`/api/users/${id}`)
 			.then((r) => r.json())
@@ -317,7 +317,7 @@ export default function Profile() {
 										) : (
 											<>
 												<FollowUserButton userId={id} />
-												{activeUserIsOwner || activeUserIsAdmin ? (
+												{activeUserIsOwner || (activeUserIsAdmin && (!isAdmin || !isOwner)) ? (
 													<IconButton
 														aria-label="Admin Tools"
 														onClick={handleOpenAdminPanel}>
