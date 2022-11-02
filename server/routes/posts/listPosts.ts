@@ -7,15 +7,18 @@ export default async (req: Request, res: Response) => {
 
 	logger.printInfo("Loading page...");
 	let offset = Number(req.query.page) || 1;
-	const search = (String(req.query.query) || "").trim();
+	const search = (req.query.query || "").toString().trim() || "";
 	const maxPerPage = 20;
 
 	const result = await posts.paginate(
-		search
+		search != undefined && search != ""
 			? {
 					tags: { $in: search.split(",") },
+					archived: false,
 			  }
-			: {},
+			: {
+					archived: false,
+			  },
 		{
 			limit: maxPerPage,
 			page: offset,

@@ -30,7 +30,7 @@
 		justify-content: flex-start;
 		align-content: center;
 		align-items: center;
-		width: 53%;
+		width: 90%;
 		max-width: 1000px;
 		height: fit-content;
 		padding: 2em;
@@ -79,67 +79,67 @@
 					align-items: center;
 					margin-left: 2.5%;
 
-                    .profile-name {
-                        display: flex;
-                        flex-direction: row;
-                        width: fit-content;
-                        font-size: 1.8em;
-                        font-weight: 600;
-                        margin: 0.5em 0 0.5em 0;
-                        color: #ffffff;
-                        text-align: left;
-                        align-items: center;
-                    }
-                    
-                    .owner-icon {
-                        color: #2e7ee3;
-                        margin-left: 0.3em;
-                    }
+					.profile-name {
+						display: flex;
+						flex-direction: row;
+						width: fit-content;
+						font-size: 1.8em;
+						font-weight: 600;
+						margin: 0.5em 0 0.5em 0;
+						color: #ffffff;
+						text-align: left;
+						align-items: center;
+					}
 
-                    .admin-icon {
-                        color: #07f472;
-                        margin-left: 0.3em;
-                    }
+					.owner-icon {
+						color: #2e7ee3;
+						margin-left: 0.3em;
+					}
 
-                    .banned-icon {
-                        height: auto;
-                        color: #ff5050;
-                        margin-left: 0.3em;
-                    }
+					.admin-icon {
+						color: #07f472;
+						margin-left: 0.3em;
+					}
 
-                    .profile-buttons {
-                        display: flex;
-                        flex-direction: row;
-                        flex-wrap: nowrap;
-                        align-content: center;
-                        justify-content: flex-end;
-                        align-items: center;
-                        width: 100%;
-                        margin-top: 0.5em;
-                    }
+					.banned-icon {
+						height: auto;
+						color: #ff5050;
+						margin-left: 0.3em;
+					}
+
+					.profile-buttons {
+						display: flex;
+						flex-direction: row;
+						flex-wrap: nowrap;
+						align-content: center;
+						justify-content: flex-end;
+						align-items: center;
+						width: 100%;
+						margin-top: 0.5em;
+					}
 				}
 			}
 		}
 	}
 
-    .profile-date {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        text-align: left;
-        margin-top: 30px;
-        padding: 1em 0 1em 0;
-        border-top: 2px solid #3f3f3f;
-        //border-bottom: 2px solid #3f3f3f;
+	.profile-date {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		text-align: left;
+		margin-top: 30px;
+		padding: 1em 0 1em 0;
+		border-top: 2px solid #3f3f3f;
+		//border-bottom: 2px solid #3f3f3f;
 
-        .profile-date-text {
-            margin-right: 5px;
-        }
+		.profile-date-text {
+			margin-right: 5px;
+		}
 
-        .date{
-            font-weight: 300;
-        }
-    }
+		.date {
+			font-weight: 300;
+		}
+	}
 
 	.profile-bio-layout {
 		display: flex !important;
@@ -149,7 +149,7 @@
 		align-items: center;
 		align-content: center;
 		flex-wrap: nowrap;
-        border-top: 2px solid #3f3f3f;
+		border-top: 2px solid #3f3f3f;
 
 		.profile-bio-title {
 			width: 100%;

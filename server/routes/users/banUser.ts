@@ -1,46 +1,60 @@
 import { Request, Response } from "express";
-import { users } from "../../../database";
+import { posts, users } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
+import { NotificationsManager } from "../../helpers/NotificationsManager";
 
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("banUser", req);
-    const adminPerms = ["admin:user", "admin:post"];
-    const userPerms = ["post:create"];
-    
-    logger.printInfo(`Banning user ${req.params.id}`);
+	const adminPerms = ["admin:user", "admin:post"];
+	const userPerms = ["post:create"];
 
-    const user = await users.findOne({ _id: req.params.id });
+	logger.printInfo(`Banning user ${req.params.id}`);
 
-    if (!user) {
-        logger.printError("User not found");
-        return res.status(404).send({
-            status: 404,
-            message: "User not found",
-        });
-    }
+	const user = await users.findOne({ _id: req.params.id });
 
-    //? disallow admins from banning other admins
-    if (user.permissions.some((perm: string) => adminPerms.includes(perm))) {
-        logger.printError("Cannot ban other admins");
-        return res.status(400).send({
-            status: 400,
-            message: "Cannot ban other admins",
-        });
-    }
+	if (!user) {
+		logger.printError("User not found");
+		return res.status(404).send({
+			status: 404,
+			message: "User not found",
+		});
+	}
 
-    user.permissions = user.permissions.filter((perm: string) => !userPerms.includes(perm));
+	const notifManager = new NotificationsManager(user);
 
-    const updatedUser = await users.findOneAndUpdate(
-        { _id: req.params.id },
-        { permissions: user.permissions },
-        { new: true }
-    );
+	//? disallow admins from banning other admins
+	if (user.permissions.some((perm: string) => adminPerms.includes(perm))) {
+		logger.printError("Cannot ban other admins");
+		return res.status(400).send({
+			status: 400,
+			message: "Cannot ban other admins",
+		});
+	}
 
-    logger.printSuccess(`User ${user.safeUsername} (${req.params._id}) banned!`);
+	user.permissions = user.permissions.filter(
+		(perm: string) => !userPerms.includes(perm)
+	);
 
-    return res.status(200).send({
-        status: 200,
-        message: "User banned!",
-        data: updatedUser,
-    });
-}
+	const updatedUser = await users.findOneAndUpdate(
+		{ _id: req.params.id },
+		{ permissions: [] },
+		{ new: true }
+	);
+
+	await posts.updateMany(
+		{ posterId: user._id },
+		{
+			archived: true,
+		}
+	);
+
+	logger.printSuccess(`User ${user.safeUsername} (${req.params._id}) banned!`);
+
+	notifManager.generateBanNotification(user);
+
+	return res.status(200).send({
+		status: 200,
+		message: "User banned!",
+		data: updatedUser,
+	});
+};

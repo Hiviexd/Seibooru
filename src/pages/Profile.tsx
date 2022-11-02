@@ -14,7 +14,11 @@ import { FollowUserButton } from "../components/UI/FollowUserButton";
 import { SettingsButton } from "../components/UI/SettingsButton";
 import { generateComponentKey } from "../utils/generateComponentKey";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShieldHalved, faTriangleExclamation, faAddressCard } from "@fortawesome/free-solid-svg-icons";
+import {
+	faShieldHalved,
+	faTriangleExclamation,
+	faAddressCard,
+} from "@fortawesome/free-solid-svg-icons";
 import checkAdmin from "../helpers/checkAdmin";
 import checkBan from "../helpers/checkBan";
 import checkOwner from "../helpers/checkOwner";
@@ -31,16 +35,25 @@ import GavelIcon from "@mui/icons-material/Gavel";
 import BalanceIcon from "@mui/icons-material/Balance";
 import AddModeratorIcon from "@mui/icons-material/AddModerator";
 import RemoveModeratorIcon from "@mui/icons-material/RemoveModerator";
+import ErrorPage from "./ErrorPage";
 import { useSnackbar } from "notistack";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
+import { LoadingPage } from "./LoadingPage";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export default function Profile() {
 	const [openAdminPanel, setOpenAdminPanel] = useState(false);
 	const [profile, setProfile] = useState(null);
+
+	//? related to badges and banned user handling
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [isBanned, setIsBanned] = useState(false);
-    const [isOwner, setIsOwner] = useState(false);
+	const [isOwner, setIsOwner] = useState(false);
+
+	//? related to admin tools
 	const [activeUserIsAdmin, setActiveUserIsAdmin] = useState(false);
 	const [activeUserIsOwner, setActiveUserIsOwner] = useState(false);
+
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
@@ -49,14 +62,17 @@ export default function Profile() {
 	const { enqueueSnackbar } = useSnackbar();
 
 	useEffect(() => {
-		console.log(login);
+		setActiveUserIsOwner(login.permissions.includes("admin:admin"));
+		setActiveUserIsAdmin(login.permissions.includes("admin:user"));
+
 		fetch(`/api/users/${id}`)
 			.then((r) => r.json())
 			.then((d) => {
 				setProfile(d.data);
-				setIsAdmin(checkAdmin(d.data));
-				setIsBanned(checkBan(d.data));
-                setIsOwner(checkOwner(d.data));
+				setIsOwner(d.data.permissions.includes("admin:admin"));
+				setIsAdmin(d.data.permissions.includes("admin:user"));
+				setIsBanned(!d.data.permissions.includes("post:create"));
+				document.title = `${d.data.username} · Profile | Seibooru`;
 			});
 
 		fetch(`/api/users/${id}/posts?page=${page}`)
@@ -64,13 +80,6 @@ export default function Profile() {
 			.then((d) => {
 				setPosts(d.data.posts);
 				setTotalPages(d.data.totalPages);
-			});
-
-		fetch(`/api/users/${login._id}`)
-			.then((r) => r.json())
-			.then((d) => {
-				setActiveUserIsAdmin(checkAdmin(d.data));
-				setActiveUserIsOwner(checkOwner(d.data));
 			});
 	}, [id]);
 
@@ -231,40 +240,61 @@ export default function Profile() {
 			</DialogContent>
 		</Dialog>
 	);
+
+	if (profile === null)
+		return (
+			<>
+				<Navbar />
+				<LoadingPage />
+			</>
+		);
+
+	if (profile === undefined)
+		return (
+			<>
+				<Navbar />
+				<ErrorPage text="We looked hard, but we can't find this user sadly..." />
+			</>
+		);
+
 	return (
 		<>
-            <Navbar />
-			{!isBanned || activeUserIsAdmin || login._id === id ? (
+			<Navbar />
+			<SearchOverlay />
+			<NotificationsSidebar />
+			{!isBanned ||
+			activeUserIsAdmin ||
+			activeUserIsOwner ||
+			login._id === id ? (
 				<div className="profile-layout">
-					<div className="profile" key={generateComponentKey(10)}>
+					<div className="profile">
 						<div className="profile-header">
 							<div className="profile-header-avatar">
 								<div
 									className="profile-pic"
 									style={{
-										backgroundImage: `url(/api/users/${id}/avatar?nonce=${generateComponentKey(
-											10
-										)})`,
+										backgroundImage: `url(/api/users/${id}/avatar)`,
 									}}
 								/>
 							</div>
 							<div className="profile-header-info">
 								<div className="name-and-followers">
 									<div className="profile-name">
-										{profile?.username}
-                                        {isOwner && (<div className="owner-icon">
+										{profile.username}
+										{isOwner ? (
+											<div className="owner-icon">
 												<Tooltip title="Owner">
 													<FontAwesomeIcon icon={faAddressCard} />
 												</Tooltip>
 											</div>
-										)}
-										{isAdmin && !isOwner && (
+										) : null}
+										{isAdmin && !isOwner ? (
 											<div className="admin-icon">
 												<Tooltip title="Admin">
 													<FontAwesomeIcon icon={faShieldHalved} />
 												</Tooltip>
 											</div>
-										)}
+										) : null}
 										{isBanned && (
 											<div className="banned-icon">
 												<Tooltip title="Banned">
@@ -274,18 +304,18 @@ export default function Profile() {
 										)}
 									</div>
 									<div className="profile-buttons">
-										{login._id === profile?._id ? (
+										{login._id === profile._id ? (
 											<SettingsButton />
 										) : (
 											<>
 												<FollowUserButton userId={id} />
-												{activeUserIsAdmin && (!isAdmin || activeUserIsOwner) && (
+												{activeUserIsOwner || activeUserIsAdmin ? (
 													<IconButton
 														aria-label="Admin Tools"
 														onClick={handleOpenAdminPanel}>
 														<MoreVertIcon />
 													</IconButton>
-												)}
+												) : null}
 											</>
 										)}
 									</div>
@@ -295,21 +325,21 @@ export default function Profile() {
 						<div className="profile-date">
 							<div className="profile-date-text">Joined</div>
 							<Tooltip
-								title={moment(profile?.createdAt).format(
+								title={moment(profile.createdAt).format(
 									"MMMM Do YYYY, h:mm:ss A"
 								)}>
 								<div className="date">
-									{moment(profile?.createdAt).fromNow()}
+									{moment(profile.createdAt).fromNow()}
 								</div>
 							</Tooltip>
 						</div>
-						{profile?.bio && (
+						{profile.bio && (
 							<div className="profile-bio-layout">
 								<div className="profile-bio-title">
 									<h3>Bio</h3>
 								</div>
 								<div className="profile-bio">
-									<p>{profile?.bio}</p>
+									<p>{profile.bio}</p>
 								</div>
 							</div>
 						)}
@@ -318,7 +348,7 @@ export default function Profile() {
 						{posts.length == 0 ? (
 							<div className="no-posts">
 								<h1>All empty here...</h1>
-								{login._id === profile?._id && <h4>Try posting something!</h4>}
+								{login._id === profile._id && <h4>Try posting something!</h4>}
 							</div>
 						) : (
 							posts.map((post) => <PostSelector post={post} />)
@@ -336,7 +366,7 @@ export default function Profile() {
 					) : null}
 				</div>
 			) : (
-				<h1>banned</h1>
+				<ErrorPage text="We'd show you this user, but they were banned for violating the rules..." />
 			)}
 			{renderDialog}
 			<PostButton />

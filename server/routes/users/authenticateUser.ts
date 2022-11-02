@@ -43,6 +43,7 @@ export default async (req: Request, res: Response) => {
 			username: user.username,
 			accountToken: user.accountToken,
 			authenticated: true,
+			permissions: user.permissions,
 		},
 	});
 };

@@ -6,6 +6,11 @@ import { Button, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
 import "./../styles/pages/Settings.scss";
 import { generateComponentKey } from "../utils/generateComponentKey";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
+import { ProfileNonceContext } from "../providers/ProfileNonceContext";
+import ErrorPage from "./ErrorPage";
+import { LoadingPage } from "./LoadingPage";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export default function Settings() {
 	const [src, setSrc] = useState<any>();
@@ -14,9 +19,12 @@ export default function Settings() {
 	const formData = useRef(new FormData());
 	const { login } = useContext(AuthContext);
 	const { enqueueSnackbar } = useSnackbar();
-	const [userData, setUserData] = useState<any>();
+	const [userData, setUserData] = useState(null);
+	const nonce = useContext(ProfileNonceContext);
 
 	useEffect(() => {
+		document.title = `Profile Settings | Seibooru`;
+
 		setSrc(`/api/users/${login._id}/avatar?nonce=${generateComponentKey(10)}`);
 
 		fetch(`/api/users/${login._id}`)
@@ -54,15 +62,33 @@ export default function Settings() {
 					variant: "success",
 				});
 				navigate("/users/" + login._id);
+
+				nonce.setString(generateComponentKey(10));
 				setLoading(false);
 			});
 	}
 
-	if (!userData) return <></>;
+	if (userData === null)
+		return (
+			<>
+				<Navbar />
+				<LoadingPage />
+			</>
+		);
+
+	if (userData === undefined)
+		return (
+			<>
+				<Navbar />
+				<ErrorPage />
+			</>
+		);
 
 	return (
 		<>
-            <Navbar />
+			<Navbar />
+			<SearchOverlay />
+			<NotificationsSidebar />
 			<div className="settings-layout">
 				<div className="scrollable">
 					<div className="form">

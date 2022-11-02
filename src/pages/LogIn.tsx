@@ -1,11 +1,13 @@
 import { VisibilityOff, Visibility, Error } from "@mui/icons-material";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../providers/AuthContext";
 import Navbar from "../components/global/Navbar";
 import "../styles/pages/LogIn.scss";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export default function LogIn() {
 	const [signup, setSignUp] = useState(
@@ -224,9 +226,15 @@ export default function LogIn() {
 		);
 	}
 
+	useEffect(() => {
+		document.title = `${signup ? "Sign-Up" : "Log-In"} | Seibooru`;
+	}, [signup]);
+
 	return (
 		<>
-            <Navbar />
+			<Navbar />
+			<SearchOverlay />
+			<NotificationsSidebar />
 			<div className="log__in__layout">
 				<div className={loading ? "form loading" : "form"}>
 					{signup ? <SignUpOptions /> : <LogInOptions />}

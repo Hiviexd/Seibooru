@@ -17,11 +17,18 @@ export default async (req: Request, res: Response) => {
 		});
 	}
 
-    logger.printSuccess(`User ${user.safeUsername} (${req.params._id}) found!`);
+	logger.printSuccess(`User ${user.safeUsername} (${req.params._id}) found!`);
 
-    return res.status(200).send({
-        status: 200,
-        message: "User found!",
-        data: user,
-    });
+	return res.status(200).send({
+		status: 200,
+		message: "User found!",
+		data: {
+			_id: user._id,
+			username: user.username,
+			safeUsername: user.safeUsername,
+			permissions: user.permissions,
+			bio: user.bio,
+			createdAt: user.createdAt,
+		},
+	});
 };

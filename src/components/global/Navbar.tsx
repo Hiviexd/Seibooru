@@ -22,18 +22,22 @@ import "./../../styles/components/global/Navbar.scss";
 import { LogoImage } from "../../styles/components/images/Logo";
 import { generateComponentKey } from "../../utils/generateComponentKey";
 import { SearchOverlayContext } from "../../providers/SeachOverlayContext";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import checkBan from "../../helpers/checkBan";
+import { ProfileNonceContext } from "../../providers/ProfileNonceContext";
+import { NotificationsContext } from "../../providers/NotificationsContext";
 
 export default function Navbar() {
 	const { login, logout } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
-    const [isBanned, setIsBanned] = useState(false);
+	const [isBanned, setIsBanned] = useState(false);
 	const isMenuOpen = Boolean(anchorEl);
 	const searchContext = useContext(SearchOverlayContext);
+	const nonce = useContext(ProfileNonceContext);
+	const notifications = useContext(NotificationsContext);
 
-    // make background color transparet if route is "/"
-    const [isHome, setIsHome] = useState("#2e7ee3");
+	// make background color transparet if route is "/"
+	const [isHome, setIsHome] = useState("#2e7ee3");
 
 	const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -68,21 +72,21 @@ export default function Navbar() {
 		searchContext.setOpen(true);
 	};
 
-    useEffect(() => {
-        if (window.location.pathname === "/") {
-            setIsHome("transparent");
-        } else {
-            setIsHome("#2e7ee3");
-        }
-    }, [window.location.pathname]);
+	useEffect(() => {
+		if (window.location.pathname === "/") {
+			setIsHome("transparent");
+		} else {
+			setIsHome("#2e7ee3");
+		}
+	}, [window.location.pathname]);
 
-    useEffect(() => {
-        fetch(`/api/users/${login._id}`)
-            .then((r) => r.json())
-            .then((d) => {
-                setIsBanned(checkBan(d.data));
-            });
-    }, [login]);
+	useEffect(() => {
+		fetch(`/api/users/${login._id}`)
+			.then((r) => r.json())
+			.then((d) => {
+				setIsBanned(checkBan(d.data));
+			});
+	}, [login]);
 
 	const renderMenu = (
 		<Menu
@@ -99,18 +103,6 @@ export default function Navbar() {
 						height: 32,
 						ml: -0.5,
 						mr: 1,
-					},
-					"&:before": {
-						content: '""',
-						display: "block",
-						position: "absolute",
-						top: 0,
-						right: 14,
-						width: 10,
-						height: 10,
-						bgcolor: "#242424",
-						transform: "translateY(-50%) rotate(45deg)",
-						zIndex: 0,
 					},
 				},
 			}}
@@ -140,68 +132,85 @@ export default function Navbar() {
 		</Menu>
 	);
 
+	function handleNotificationToggle() {
+		notifications.setOpen(!notifications.open);
+	}
+
 	return (
-        <>
-		<div className="navbar" key={generateComponentKey(20)} style={{ backgroundColor: isHome }} >
-			<div className="navbar-left">
-				<Link to="/" className="logo-container">
-					<LogoImage className="logo" />
-				</Link>
-				<Link to="/" className="button">
-					Home
-				</Link>
-				<Link to="/listing" className="button">
-					Listing
-				</Link>
-				<Link to="/about" className="button">
-					About
-				</Link>
-				<IconButton size="large" aria-label="search" color="inherit">
-					<SearchIcon onClick={handleSearchToggle} />
-				</IconButton>
+		<>
+			<div
+				className="navbar"
+				key={generateComponentKey(20)}
+				style={{ backgroundColor: isHome }}>
+				<div className="navbar-left">
+					<Link to="/" className="logo-container">
+						<LogoImage className="logo" />
+					</Link>
+					<Link to="/" className="button">
+						Home
+					</Link>
+					<Link to="/listing" className="button">
+						Listing
+					</Link>
+					<Link to="/about" className="button">
+						About
+					</Link>
+					<IconButton size="large" aria-label="search" color="inherit">
+						<SearchIcon onClick={handleSearchToggle} />
+					</IconButton>
+				</div>
+				{!login.authenticated ? (
+					<div className="navbar-right">
+						<Link to="/signup" className="button signup">
+							SIGN UP
+						</Link>
+						<Link to="/login" className="button login">
+							LOGIN
+						</Link>
+					</div>
+				) : (
+					<></>
+				)}
+				{login.authenticated ? (
+					<div className="navbar-right">
+						<IconButton
+							size="large"
+							aria-label="show new notifications"
+							color="inherit"
+							onClick={handleNotificationToggle}>
+							{notifications.notifications.length == 0 ? (
+								<NotificationsIcon />
+							) : (
+								<Badge
+									badgeContent={notifications.notifications.length}
+									color="error">
+									<NotificationsIcon />
+								</Badge>
+							)}
+						</IconButton>
+						<IconButton
+							size="large"
+							edge="end"
+							aria-label="account of current user"
+							aria-haspopup="true"
+							onClick={handleMenuOpen}
+							color="inherit">
+							<Avatar
+								src={`/api/users/${login._id}/avatar?nonce=${nonce.string}`}
+							/>
+						</IconButton>
+						{renderMenu}
+					</div>
+				) : (
+					<></>
+				)}
 			</div>
-			{!login.authenticated ? (
-				<div className="navbar-right">
-					<Link to="/signup" className="button signup">
-						SIGN UP
-					</Link>
-					<Link to="/login" className="button login">
-						LOGIN
-					</Link>
-				</div>
-			) : (
-				<></>
+			{isBanned && (
+				<Alert variant="filled" severity="error">
+					You are currently banned for violating the rules. Contact an Admin if
+					you think this is a mistake.
+				</Alert>
 			)}
-			{login.authenticated ? (
-				<div className="navbar-right">
-					<IconButton
-						size="large"
-						aria-label="show new notifications"
-						color="inherit">
-						<Badge badgeContent={1} color="error">
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
-					<IconButton
-						size="large"
-						edge="end"
-						aria-label="account of current user"
-						aria-haspopup="true"
-						onClick={handleMenuOpen}
-						color="inherit">
-						<Avatar
-							src={`/api/users/${login._id}/avatar?nonce=${generateComponentKey(
-								10
-							)}`}
-						/>
-					</IconButton>
-					{renderMenu}
-				</div>
-			) : (
-				<></>
-			)}
-		</div>
-        {isBanned && <Alert variant="filled" severity="error">You are currently banned for violating the rules. Contact an Admin if you think this is a mistake.</Alert>}
-        </>
+		</>
 	);
 }

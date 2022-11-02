@@ -2,11 +2,13 @@ import { Button, TextField } from "@mui/material";
 import Navbar from "../components/global/Navbar";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { TrendingTags } from "../components/global/TrendingTags";
 import { AuthContext } from "../providers/AuthContext";
 import "./../styles/pages/CreatePost.scss";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export function CreatePost() {
 	const [src, setSrc] = useState<any>();
@@ -50,9 +52,15 @@ export function CreatePost() {
 			});
 	}
 
+	useEffect(() => {
+		document.title = "Create Post | Seibooru";
+	}, []);
+
 	return (
 		<>
-            <Navbar />
+			<Navbar />
+			<SearchOverlay />
+			<NotificationsSidebar />
 			<div className="create-post-layout">
 				<TrendingTags />
 				<div className="scrollable">

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { followers, users } from "../../../database";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 import crypto from "crypto";
+import { NotificationsManager } from "../../helpers/NotificationsManager";
 
 export default async (req: Request, res: Response) => {
 	const logger = new LoggerConsumer("getUser", req);
@@ -33,6 +34,8 @@ export default async (req: Request, res: Response) => {
 		});
 	}
 
+	const notifManager = new NotificationsManager(author);
+
 	const currentFollower = await followers.findOne({
 		userId: author._id,
 		target: user._id,
@@ -61,6 +64,7 @@ export default async (req: Request, res: Response) => {
 	);
 
 	const currentFollowersSize = await followers.count({ target: user._id });
+	notifManager.generateFollowNotification(user);
 
 	return res.status(200).send({
 		status: 200,

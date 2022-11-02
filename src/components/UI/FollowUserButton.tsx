@@ -50,7 +50,7 @@ export function FollowUserButton({ userId }: { userId: string }) {
 			});
 	}, []);
 
-	if (!followData) return <></>;
+	// if (!followData) return <></>;
 
 	function handleFollowButton(followData: IFollowersResponse) {
 		fetch(`/api/users/${userId}/followers`, {
@@ -71,9 +71,7 @@ export function FollowUserButton({ userId }: { userId: string }) {
 	}
 
 	return (
-		<div
-			className={`follow-button-container ${following ? "following" : ""}`}
-			key={generateComponentKey(10)}>
+		<div className={`follow-button-container ${following ? "following" : ""}`}>
 			<div
 				onMouseOver={handleMouseOver}
 				onMouseOut={handleMouseOut}

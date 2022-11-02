@@ -1,14 +1,22 @@
+import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import "../styles/pages/About.scss";
 import logo from "../assets/logo-big.png";
 import Navbar from "../components/global/Navbar";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export default function About() {
+	useEffect(() => {
+		document.title = "About | Seibooru";
+	}, []);
 	return (
 		<>
 			<Navbar />
+			<SearchOverlay />
+			<NotificationsSidebar />
 			<div className="about-page">
 				<div className="content">
 					<div className="logo-container">
@@ -18,7 +26,7 @@ export default function About() {
 							<a
 								className="logo-credit__link"
 								href="https://twitter.com/ZethZ161"
-                                target="_blank">
+								target="_blank">
 								<FontAwesomeIcon icon={faTwitter} /> ZethZ161
 							</a>
 						</div>

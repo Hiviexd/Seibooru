@@ -9,6 +9,7 @@ export interface IPost {
 	posterUsername: string;
 	likes: string[];
 	createdAt: Date;
+	archived: Boolean;
 }
 
 export default new Schema({
@@ -20,4 +21,8 @@ export default new Schema({
 	posterUsername: String,
 	likes: [String],
 	createdAt: Date,
+	archived: {
+		type: Boolean,
+		default: false,
+	},
 });

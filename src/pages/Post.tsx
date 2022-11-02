@@ -9,7 +9,10 @@ import { TrendingTags } from "../components/global/TrendingTags";
 import { LikeButton } from "../components/UI/LikeButton";
 import { PostButton } from "../components/UI/PostButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShieldHalved, faAddressCard } from "@fortawesome/free-solid-svg-icons";
+import {
+	faShieldHalved,
+	faAddressCard,
+} from "@fortawesome/free-solid-svg-icons";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -28,16 +31,20 @@ import "@emotion/styled";
 import { generateComponentKey } from "../utils/generateComponentKey";
 import checkAdmin from "../helpers/checkAdmin";
 import checkOwner from "../helpers/checkOwner";
+import { SearchOverlay } from "../components/UI/SearchOverlay";
+import ErrorPage from "./ErrorPage";
+import { LoadingPage } from "./LoadingPage";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export default function Post() {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [isAdminPoster, setIsAdminPoster] = useState(false);
-    const [isOwnerPoster, setIsOwnerPoster] = useState(false);
+	const [isOwnerPoster, setIsOwnerPoster] = useState(false);
 	const [openDelete, setOpenDelete] = React.useState(false);
 	const [openEdit, setOpenEdit] = React.useState(false);
-	const [postData, setPostData] = useState<any>();
+	const [postData, setPostData] = useState<any>(null);
 	const [title, setTitle] = useState("");
 	const [tags, setTags] = useState([]);
 	const postId = new URLSearchParams(location.search).get("post");
@@ -138,12 +145,14 @@ export default function Post() {
 			.then((r) => r.json())
 			.then((d) => {
 				setPostData(d.data);
-                setTags(d.data.tags);
+				setTags(d.data.tags);
+				document.title = `${d.data.title} · Post | Seibooru`;
+
 				fetch(`/api/users/${d.data.posterId}`)
 					.then((r) => r.json())
 					.then((d) => {
 						setIsAdminPoster(checkAdmin(d.data));
-                        setIsOwnerPoster(checkOwner(d.data));
+						setIsOwnerPoster(checkOwner(d.data));
 					});
 			});
 
@@ -154,11 +163,27 @@ export default function Post() {
 			});
 	}, []);
 
-	if (!postData) return <></>;
+	if (postData === undefined)
+		return (
+			<>
+				<Navbar />
+				<ErrorPage text="We looked hard, but we can't find this post sadly..." />
+			</>
+		);
+
+	if (postData === null)
+		return (
+			<>
+				<Navbar />
+				<LoadingPage />
+			</>
+		);
 
 	return (
 		<>
-            <Navbar />
+			<Navbar />
+			<SearchOverlay />
+			<NotificationsSidebar />
 			<div className="post_page_layout">
 				<TrendingTags />
 				<div className="scrollable">
@@ -194,37 +219,35 @@ export default function Post() {
 										</Tooltip>
 									</>
 								)}
-                                <Tooltip title="Download">
-                                    <IconButton
-                                        className="button"
-                                        aria-label="download"
-                                        onClick={() => {
-                                            //download image
-                                            fetch(`/api/posts/${postData._id}/image`)
-                                                .then((r) => r.blob())
-                                                .then((blob) => {
-                                                    const url = window.URL.createObjectURL(
-                                                        new Blob([blob])
-                                                    );
-                                                    const link = document.createElement(
-                                                        "a" 
-                                                    );
-                                                    link.href = url;
-                                                    const filename = postData.filename.split(".")
-                                                    link.setAttribute(
-                                                        "download",
-                                                        `${postData.title}.${filename[filename.length - 1]}`
-                                                    );
-                                                    document.body.appendChild(link);
-                                                    link.click();
-                                                    link.parentNode.removeChild(link);
-                                                });
-                                        }}
-                                        size="small"
-                                        color="success">
-                                        <DownloadIcon />
-                                    </IconButton>
-                                </Tooltip>
+								<Tooltip title="Download">
+									<IconButton
+										className="button"
+										aria-label="download"
+										onClick={() => {
+											//download image
+											fetch(`/api/posts/${postData._id}/image`)
+												.then((r) => r.blob())
+												.then((blob) => {
+													const url = window.URL.createObjectURL(
+														new Blob([blob])
+													);
+													const link = document.createElement("a");
+													link.href = url;
+													const filename = postData.filename.split(".");
+													link.setAttribute(
+														"download",
+														`${postData.title}.${filename[filename.length - 1]}`
+													);
+													document.body.appendChild(link);
+													link.click();
+													link.parentNode.removeChild(link);
+												});
+										}}
+										size="small"
+										color="success">
+										<DownloadIcon />
+									</IconButton>
+								</Tooltip>
 								<LikeButton post={postData} />
 							</div>
 						</div>
@@ -250,7 +273,7 @@ export default function Post() {
 							<Link to={`/users/${postData.posterId}`} className="username">
 								{postData.posterUsername}
 							</Link>
-                            {isOwnerPoster && (
+							{isOwnerPoster && (
 								<div className="owner-icon">
 									<Tooltip title="Owner">
 										<FontAwesomeIcon icon={faAddressCard} />

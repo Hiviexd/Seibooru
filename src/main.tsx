@@ -19,31 +19,37 @@ import Post from "./pages/Post";
 import { CreatePost } from "./pages/CreatePost";
 import TrendingTagsProvider from "./providers/TrendingTagsContext";
 import SearchOverlayProvider from "./providers/SeachOverlayContext";
-
+import { SearchOverlay } from "./components/UI/SearchOverlay";
+import ProfileNonceProvider from "./providers/ProfileNonceContext";
+import NotificationsProvider from "./providers/NotificationsContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-	<AuthProvider>
-		<TrendingTagsProvider>
-			<SearchOverlayProvider>
-				<SnackbarProvider maxSnack={3} preventDuplicate>
-					<BrowserRouter>
-						<ThemeProvider theme={theme}>
-							<Routes>
-								<Route path="/" element={<Home />} />
-								<Route path="/listing" element={<Listing />} />
-								<Route path="/login" element={<LogIn />} />
-								<Route path="/signup" element={<LogIn />} />
-								<Route path="/posts" element={<Post />} />
-								<Route path="/new" element={<CreatePost />} />
-								<Route path="/users/:id" element={<Profile />} />
-								<Route path="/settings" element={<Settings />} />
-                                <Route path="/about" element={<About />} />
-								<Route path="*" element={<Listing />} />
-							</Routes>
-						</ThemeProvider>
-					</BrowserRouter>
-				</SnackbarProvider>
-			</SearchOverlayProvider>
-		</TrendingTagsProvider>
-	</AuthProvider>
+	<ProfileNonceProvider>
+		<AuthProvider>
+			<TrendingTagsProvider>
+				<SearchOverlayProvider>
+					<NotificationsProvider>
+						<SnackbarProvider maxSnack={3} preventDuplicate>
+							<BrowserRouter>
+								<ThemeProvider theme={theme}>
+									<Routes>
+										<Route path="/" element={<Home />} />
+										<Route path="/listing" element={<Listing />} />
+										<Route path="/login" element={<LogIn />} />
+										<Route path="/signup" element={<LogIn />} />
+										<Route path="/posts" element={<Post />} />
+										<Route path="/new" element={<CreatePost />} />
+										<Route path="/users/:id" element={<Profile />} />
+										<Route path="/settings" element={<Settings />} />
+										<Route path="/about" element={<About />} />
+										<Route path="*" element={<Listing />} />
+									</Routes>
+								</ThemeProvider>
+							</BrowserRouter>
+						</SnackbarProvider>
+					</NotificationsProvider>
+				</SearchOverlayProvider>
+			</TrendingTagsProvider>
+		</AuthProvider>
+	</ProfileNonceProvider>
 );

@@ -1,0 +1,64 @@
+.loading-page {
+	width: 100%;
+	height: calc(100% - 70px);
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+
+	.container {
+		width: 90%;
+		max-width: 1000px;
+		display: flex;
+		background: #323131;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-content: center;
+		justify-content: center;
+		align-items: center;
+		padding: 30px 0px;
+		font-size: 2rem;
+		border-radius: 5px;
+		font-weight: 500;
+
+		.loading-animation {
+			border: 6px solid transparent;
+			border-top: 5px solid #c9d1d9;
+			border-right: 5px solid #c9d1d9;
+			border-bottom: 5px solid #c9d1d9;
+			border-radius: 50%;
+			width: 70px;
+			height: 70px;
+			animation: spin 0.7s linear infinite;
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+		}
+
+		p {
+			animation: blink 1200ms linear infinite;
+			@keyframes blink {
+				0% {
+					opacity: 0.5;
+				}
+
+				80% {
+					opacity: 1;
+				}
+
+				100% {
+					opacity: 0.5;
+				}
+			}
+		}
+	}
+}

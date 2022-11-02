@@ -9,25 +9,34 @@ import { TrendingTagsContext } from "../providers/TrendingTagsContext";
 import { PostButton } from "../components/UI/PostButton";
 import { useParams } from "react-router-dom";
 import { SearchOverlay } from "../components/UI/SearchOverlay";
+import { SearchOverlayContext } from "../providers/SeachOverlayContext";
+import { SearchIndicator } from "../components/UI/SearchIndicator";
+import ErrorPage from "./ErrorPage";
+import { LoadingPage } from "./LoadingPage";
+import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 
 export default function Listing() {
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const trendingTagsContext = useContext(TrendingTagsContext);
-	const { query } = useParams();
+	const search = useContext(SearchOverlayContext);
 
 	useEffect(() => {
-		fetch(`/api/posts/listing?page=${page}&query=${query || ""}`)
+		document.title = "Listing | Seibooru";
+	}, [posts]);
+
+	useEffect(() => {
+		fetch(`/api/posts/listing?page=${page}&query=${search.search || ""}`)
 			.then((r) => r.json())
 			.then((d) => {
 				setPosts(d.data.posts);
 				setTotalPages(d.data.totalPages);
 			});
-	}, [query]);
+	}, []);
 
-	function refreshListing(page: number) {
-		fetch(`/api/posts/listing?page=${page}`)
+	function refreshListing(query: string) {
+		fetch(`/api/posts/listing?page=${page}&query=${query || ""}`)
 			.then((r) => r.json())
 			.then((d) => {
 				setPosts(d.data.posts);
@@ -35,10 +44,24 @@ export default function Listing() {
 			});
 	}
 
+	useEffect(() => {
+		if (!search.open) refreshListing(search.search);
+	}, [search]);
+
+	if (posts === null)
+		return (
+			<>
+				<Navbar />
+				<SearchOverlay />
+				<LoadingPage />
+			</>
+		);
+
 	return (
 		<>
-            <Navbar />
+			<Navbar />
 			<SearchOverlay />
+			<NotificationsSidebar />
 			<div className="listing_layout">
 				<TrendingTags />
 				<div
@@ -47,10 +70,15 @@ export default function Listing() {
 					style={{
 						width: `${trendingTagsContext.open ? 75 : 100}%`,
 					}}>
+					<SearchIndicator />
 					<div className="scroll">
-						{posts.map((post) => (
-							<PostSelector post={post} />
-						))}
+						{posts.length == 0 ? (
+							<ErrorPage text="There's no results for your search..." />
+						) : (
+							posts.map((post) => {
+								return <PostSelector post={post} />;
+							})
+						)}
 					</div>
 					<Pagination
 						count={totalPages}
@@ -58,7 +86,7 @@ export default function Listing() {
 						color="primary"
 						onChange={(ev, value) => {
 							setPage(value);
-							refreshListing(value);
+							refreshListing(search.search);
 						}}
 					/>
 				</div>

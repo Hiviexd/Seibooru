@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { posts, users } from "../../../database";
+import { NotificationsManager } from "../../helpers/NotificationsManager";
 import { updateTrendingTag } from "../../trending/updateTendingTag";
 
 export default async (req: Request, res: Response) => {
@@ -28,10 +29,16 @@ export default async (req: Request, res: Response) => {
 			message: "Duplicated",
 		});
 
+	const notificationManager = new NotificationsManager();
+
 	post.likes.push(user._id);
 	await posts.findByIdAndUpdate(post._id, post);
 
 	post.tags.forEach((t) => updateTrendingTag(t, true));
+
+	if (100000 % post.likes.length || post.likes.length == 1) {
+		notificationManager.generateLikeNotitication(post, post.likes.length);
+	}
 
 	return res.status(200).send({
 		status: 200,
