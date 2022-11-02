@@ -33,8 +33,7 @@ export default function About() {
 					</div>
 					<div className="text">
 						<div className="description">
-							Graduation project for the GOMYCODE Full-Stack web development
-							course.
+							Graduation project for the GOMYCODE Fullstack Web Development Bootcamp.
 						</div>
 						<div className="note">
 							made with <FontAwesomeIcon icon={faHeart} className="heart" />
