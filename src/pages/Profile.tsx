@@ -44,6 +44,7 @@ import { NotificationsSidebar } from "../components/UI/NotificationsSidebar";
 export default function Profile() {
 	const [openAdminPanel, setOpenAdminPanel] = useState(false);
 	const [profile, setProfile] = useState(null);
+    const [followerCount, setFollowerCount] = useState(0);
 
 	//? related to badges and banned user handling
 	const [isAdmin, setIsAdmin] = useState(false);
@@ -81,6 +82,13 @@ export default function Profile() {
 				setPosts(d.data.posts);
 				setTotalPages(d.data.totalPages);
 			});
+
+        fetch(`/api/users/${id}/followers`)
+            .then((r) => r.json())
+            .then((d) => {
+                setFollowerCount(d.data.size);
+            }
+        );
 	}, [id]);
 
 	function refreshListing(page: number) {
@@ -322,17 +330,27 @@ export default function Profile() {
 								</div>
 							</div>
 						</div>
-						<div className="profile-date">
-							<div className="profile-date-text">Joined</div>
-							<Tooltip
-								title={moment(profile.createdAt).format(
-									"MMMM Do YYYY, h:mm:ss A"
-								)}>
-								<div className="date">
-									{moment(profile.createdAt).fromNow()}
-								</div>
-							</Tooltip>
-						</div>
+                        <div className="profile-content">
+                            <div className="profile-date">
+                                <div className="profile-date-text">Joined</div>
+                                <Tooltip
+                                    title={moment(profile.createdAt).format(
+                                        "MMMM Do YYYY, h:mm:ss A"
+                                    )}>
+                                    <div className="date">
+                                        {moment(profile.createdAt).fromNow()}
+                                    </div>
+                                </Tooltip>
+                            </div>
+                            <div className="profile-follower-count">
+                                <div className="follower-count">
+                                    {followerCount}
+                                </div>
+                                <div className="follower-count-text">
+                                    {followerCount === 1 ? "Follower" : "Followers"}
+                                </div>
+                            </div>
+                        </div>
 						{profile.bio && (
 							<div className="profile-bio-layout">
 								<div className="profile-bio-title">

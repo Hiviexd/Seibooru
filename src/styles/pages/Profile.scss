@@ -122,24 +122,43 @@
 		}
 	}
 
-	.profile-date {
-		display: flex;
-		flex-direction: row;
-		width: 100%;
-		text-align: left;
-		margin-top: 30px;
-		padding: 1em 0 1em 0;
-		border-top: 2px solid #3f3f3f;
-		//border-bottom: 2px solid #3f3f3f;
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+        margin-top: 30px;
+        padding: 1em 0 1em 0;
+        border-top: 2px solid #3f3f3f;
 
-		.profile-date-text {
-			margin-right: 5px;
-		}
+        .profile-date {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            text-align: left;
 
-		.date {
-			font-weight: 300;
-		}
-	}
+            .profile-date-text {
+                margin-right: 5px;
+            }
+
+            .date {
+                font-weight: 300;
+            }
+        }
+
+        .profile-follower-count {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            text-align: left;
+            margin-top: 10px;
+
+            .follower-count {
+                font-weight: 300;
+                margin-right: 5px;
+            }
+        }
+    }
 
 	.profile-bio-layout {
 		display: flex !important;
