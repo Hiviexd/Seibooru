@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { users } from "../../../database";
-import { PasswordManager } from "../../helpers/passwordManager";
+import { PasswordManager } from "../../helpers/PasswordManager";
 
 export default async (req: Request, res: Response) => {
 	const { username, password } = req.body;
@@ -27,9 +27,9 @@ export default async (req: Request, res: Response) => {
 			message: "User not found",
 		});
 
-	const passwordManager = new PasswordManager(password, user.passwordHash);
+	const PasswordManager = new PasswordManager(password, user.passwordHash);
 
-	if (!(await passwordManager.isValid()))
+	if (!(await PasswordManager.isValid()))
 		return res.status(400).send({
 			status: 400,
 			message: "Invalid password",
