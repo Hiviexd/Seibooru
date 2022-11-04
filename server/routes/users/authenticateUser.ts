@@ -27,9 +27,9 @@ export default async (req: Request, res: Response) => {
 			message: "User not found",
 		});
 
-	const PasswordManager = new PasswordManager(password, user.passwordHash);
+	const passwordManager = new PasswordManager(password, user.passwordHash);
 
-	if (!(await PasswordManager.isValid()))
+	if (!(await passwordManager.isValid()))
 		return res.status(400).send({
 			status: 400,
 			message: "Invalid password",

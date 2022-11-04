@@ -37,8 +37,8 @@ export default async (req: Request, res: Response) => {
 		});
 	}
 
-	const PasswordManager = new PasswordManager(password);
-	const passwordHash = await PasswordManager.generateHash();
+	const passwordManager = new PasswordManager(password);
+	const passwordHash = await passwordManager.generateHash();
 	const userId = crypto.randomBytes(10).toString("hex").slice(10);
 	const accountToken = crypto.randomBytes(30).toString("hex").slice(30);
 
