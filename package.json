@@ -2,12 +2,11 @@
   "name": "seibooru",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
     "preview": "vite preview",
-    "start": "node dist/server.js"
+    "start": "node dist/server/server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
