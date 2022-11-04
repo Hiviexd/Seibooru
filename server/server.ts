@@ -32,9 +32,9 @@ app.use((err, req, res, next) => {
 // });
 
 if (process.env.NODE_ENV == "production") {
-	app.use("/assets", (req, res) => res.sendFile(path.resolve("./dist/assets")));
+	app.use("/assets", express.static(path.resolve("./dist/assets")));
 
-	app.use("/", (req, res) => res.send(path.resolve("./dist/index.html")));
+	app.use("/", (req, res) => res.sendFile(path.resolve("./dist/index.html")));
 
 	app.listen(app.get("port"), () => {
 		consoleLog.green(
