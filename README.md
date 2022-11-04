@@ -7,7 +7,7 @@ A tag-based image hosting platform, made as a graduation project for the [GOMYCO
 ## Running
 
 - `yarn`
-- Set up `.env` file using `.env.example` as a template.
+- Set up `.env` file using `.env.example` as a template
 - `yarn dev`
 
 ## Thanks to
