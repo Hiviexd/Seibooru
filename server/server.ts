@@ -2,6 +2,7 @@
 import express, { Handler } from "express";
 import * as consoleLog from "./helpers/consoleLog";
 import dotenv from "dotenv";
+import path from "path";
 import "../database";
 
 //? import routes
@@ -31,6 +32,10 @@ app.use((err, req, res, next) => {
 // });
 
 if (process.env.NODE_ENV == "production") {
+	app.use("/assets", (req, res) => res.send(path.resolve("./dist/assets")));
+
+	app.use("/", (req, res) => res.send(path.resolve("./dist/index.html")));
+
 	app.listen(app.get("port"), () => {
 		consoleLog.green(
 			"server",
