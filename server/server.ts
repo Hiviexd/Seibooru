@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
 // });
 
 if (process.env.NODE_ENV == "production") {
-	app.use("/assets", (req, res) => res.send(path.resolve("./dist/assets")));
+	app.use("/assets", (req, res) => res.sendFile(path.resolve("./dist/assets")));
 
 	app.use("/", (req, res) => res.send(path.resolve("./dist/index.html")));
 
