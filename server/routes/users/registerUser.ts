@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { users } from "../../../database";
 import crypto from "crypto";
-import { PasswordManager } from "../../helpers/passwordManager";
+import { PasswordManager } from "../../helpers/PasswordManager";
 import { LoggerConsumer } from "../../helpers/LoggerConsumer";
 
 export default async (req: Request, res: Response) => {
@@ -29,9 +29,7 @@ export default async (req: Request, res: Response) => {
 	});
 
 	if (user) {
-		logger.printError(
-			"Process failed with code 403: Username already taken"
-		);
+		logger.printError("Process failed with code 403: Username already taken");
 
 		return res.status(403).send({
 			status: 403,
@@ -39,8 +37,8 @@ export default async (req: Request, res: Response) => {
 		});
 	}
 
-	const passwordManager = new PasswordManager(password);
-	const passwordHash = await passwordManager.generateHash();
+	const PasswordManager = new PasswordManager(password);
+	const passwordHash = await PasswordManager.generateHash();
 	const userId = crypto.randomBytes(10).toString("hex").slice(10);
 	const accountToken = crypto.randomBytes(30).toString("hex").slice(30);
 
@@ -52,7 +50,7 @@ export default async (req: Request, res: Response) => {
 		passwordHash: passwordHash,
 		createdAt: new Date(),
 		permissions: ["post:create"],
-        bio: "Hello, world!"
+		bio: "Hello, world!",
 	});
 
 	const createdUser = await users.findById(userId);
@@ -71,7 +69,7 @@ export default async (req: Request, res: Response) => {
 		data: {
 			_id: createdUser._id,
 			username: createdUser.username,
-            bio: createdUser.bio,
+			bio: createdUser.bio,
 			accountToken: createdUser.accountToken,
 			authenticated: true,
 		},
