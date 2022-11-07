@@ -10,7 +10,7 @@ export default new Schema({
 	permissions: {
 		type: Array,
 		default: ["post:create"],
-		//? Available permissions: post:create, admin:post, admin:user
+		//? Available permissions: post:create, admin:post, admin:user, admin:admin
 	},
 	createdAt: Date,
 });

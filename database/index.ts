@@ -12,7 +12,7 @@ dotenv.config();
 
 const logger = new LoggerConsumer("database");
 
-logger.printInfo("Starting databse connection...");
+logger.printInfo("Starting database connection...");
 mongoose.connect(
 	`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
 	(err) => {
@@ -34,16 +34,3 @@ export const posts = mongoose.model<
 	IPost,
 	mongoose.PaginateModel<IPost, PostDocument>
 >("Post", Post);
-
-let c = 0;
-// posts.find().then((_posts) => {
-// 	_posts.forEach(async (p) => {
-// 		console.log(c, posts.length);
-// 		await posts.findByIdAndUpdate(p._id, {
-// 			archived: false,
-// 		});
-
-// 		c++;
-// 		console.log(`>>> ${c}`, _posts.length);
-// 	});
-// });
